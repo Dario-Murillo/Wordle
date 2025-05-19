@@ -8,14 +8,18 @@ export default [
   {
     files: ['**/*.js', '**/*.jsx'],
     rules: {
-      'react/react-in-jsx-scope': 'off', // Disable for Next.js
-      'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }], // Allow JSX in .js files,
-      'import/no-extraneous-dependencies': 'off', // Disable for Next.js
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+      'import/no-extraneous-dependencies': 'off',
     },
   },
   {
     settings: {
       'import/resolver': {
+        alias: {
+          map: [['@', './src']],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
         node: {
           extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
