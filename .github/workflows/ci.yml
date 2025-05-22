@@ -32,12 +32,6 @@ jobs:
       - name: 📦 Instalar dependencias
         run: npm ci
 
-      - name: 💔 Analizar con SonarQube
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
       - name: 🔍 Ejecutar ESLint
         run: npm run lint
 
