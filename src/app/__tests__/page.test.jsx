@@ -43,3 +43,19 @@ test('carga layout', () => {
   );
   expect(screen.getByRole('main')).toBeInTheDocument();
 });
+
+test('carga layout con children', () => {
+  vi.mock('next/font/google', () => ({
+    Karla: () => ({ variable: 'karla' }),
+    Alfa_Slab_One: () => ({ variable: 'alfaslabone' }),
+  }));
+
+  render(
+    <RootLayout>
+      <h1>Hola</h1>
+    </RootLayout>,
+  );
+  expect(
+    screen.getByRole('heading', { level: 1, name: 'Hola' }),
+  ).toBeInTheDocument();
+});
