@@ -25,8 +25,11 @@ jobs:
         run: npm ci
 
       - name: 🔍 Ejecutar ESLint
-        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+        run: npm run lint
+
+      - name: 🥀 Ejecutar Prettier
+        run: npm run format:check
 
       - name: 🧪 Ejecutar pruebas
-        run: npx vitest run
+        run: npm run test
 
