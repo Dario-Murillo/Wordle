@@ -1,5 +1,6 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import RootLayout from '../layout';
 import Home from '../page';
 
 test('carga Wordle heading', () => {
@@ -27,4 +28,18 @@ test('carga ambos botones', () => {
     screen.getByRole('button', { name: /Iniciar Sesión/i }),
   ).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /Jugar/i })).toBeInTheDocument();
+});
+
+test('carga layout', () => {
+  vi.mock('next/font/google', () => ({
+    Karla: () => ({ variable: 'karla' }),
+    Alfa_Slab_One: () => ({ variable: 'alfaslabone' }),
+  }));
+
+  render(
+    <RootLayout>
+      <Home />
+    </RootLayout>,
+  );
+  expect(screen.getByRole('main')).toBeInTheDocument();
 });
