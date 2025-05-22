@@ -20,7 +20,9 @@ jobs:
     steps:
       - name: 🔄 Clonar repo
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      
       - name: 🏗️ Instalar Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,6 +31,12 @@ jobs:
 
       - name: 📦 Instalar dependencias
         run: npm ci
+
+      - name: 💔 Analizar con SonarQube
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: 🔍 Ejecutar ESLint
         run: npm run lint
