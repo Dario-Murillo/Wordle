@@ -21,8 +21,8 @@ jobs:
       - name: 🔄 Clonar repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
       - name: 🏗️ Instalar Node.js
         uses: actions/setup-node@v4
         with:
