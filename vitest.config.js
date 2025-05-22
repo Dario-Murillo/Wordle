@@ -2,10 +2,15 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      include: [/\.js$/, /\.jsx$/, /\.ts$/, /\.tsx$/], // ✅ acepta JSX en .js también
+    }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: './vitest.setup.js',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
