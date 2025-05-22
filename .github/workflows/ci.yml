@@ -1,0 +1,32 @@
+name: CI - Quality Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Quality Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Clonar repo
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🔍 Ejecutar ESLint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: 🧪 Ejecutar pruebas
+        run: npx vitest run
+
