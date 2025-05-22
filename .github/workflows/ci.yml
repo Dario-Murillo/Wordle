@@ -2,9 +2,15 @@ name: CI - Quality Check
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
+      - 'feature/**'
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
+      - 'feature/**'
 
 jobs:
   build:
@@ -32,4 +38,3 @@ jobs:
 
       - name: 🧪 Ejecutar pruebas
         run: npm run test
-
