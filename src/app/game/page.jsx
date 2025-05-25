@@ -5,6 +5,22 @@ import { useEffect, useState } from 'react';
 export default function Game() {
   const [isDifficultyModalOpen, setIsDifficultyModalOpen] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [secretWord, setSecretWord] = useState('');
+
+  const fetchRandomWord = async () => {
+    try {
+      const res = await fetch('/words.txt');
+      const text = await res.text();
+      const words = text
+        .split('\n')
+        .map((w) => w.trim())
+        .filter(Boolean);
+      const randomWord = words[Math.floor(Math.random() * words.length)];
+      setSecretWord(randomWord);
+    } catch (error) {
+      console.error('Failed to load words:', error);
+    }
+  };
 
   useEffect(() => {
     if (isDifficultyModalOpen) {
@@ -18,6 +34,7 @@ export default function Game() {
     setModalVisible(false);
     setTimeout(() => {
       setIsDifficultyModalOpen(false);
+      fetchRandomWord();
     }, 500);
   };
 
@@ -52,7 +69,11 @@ export default function Game() {
         </div>
       )}
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center"></main>
+      <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+        {secretWord && (
+          <p className="text-white">Palabra secreta: {secretWord}</p>
+        )}
+      </main>
     </div>
   );
 }
