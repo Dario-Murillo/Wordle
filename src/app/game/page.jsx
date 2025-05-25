@@ -7,6 +7,28 @@ export default function Game() {
   const [modalVisible, setModalVisible] = useState(false);
   const [secretWord, setSecretWord] = useState('');
 
+  useEffect(() => {
+    const savedWord = localStorage.getItem('secretWord');
+    const savedDifficulty = localStorage.getItem('difficulty');
+
+    if (savedWord && savedDifficulty) {
+      setSecretWord(savedWord);
+      setIsDifficultyModalOpen(false);
+    } else {
+      // No game in progress
+      setTimeout(() => setModalVisible(true), 10);
+    }
+  }, []);
+
+  const handleDifficultySelect = (difficulty) => {
+    setModalVisible(false);
+    setTimeout(() => {
+      setIsDifficultyModalOpen(false);
+      localStorage.setItem('difficulty', difficulty);
+      fetchRandomWord();
+    }, 500);
+  };
+
   const fetchRandomWord = async () => {
     try {
       const res = await fetch('/words.txt');
@@ -17,25 +39,10 @@ export default function Game() {
         .filter(Boolean);
       const randomWord = words[Math.floor(Math.random() * words.length)];
       setSecretWord(randomWord);
+      localStorage.setItem('secretWord', randomWord.toLowerCase());
     } catch (error) {
       console.error('Failed to load words:', error);
     }
-  };
-
-  useEffect(() => {
-    if (isDifficultyModalOpen) {
-      setTimeout(() => {
-        setModalVisible(true);
-      }, 10);
-    }
-  }, [isDifficultyModalOpen]);
-
-  const handleDifficultySelect = (difficulty) => {
-    setModalVisible(false);
-    setTimeout(() => {
-      setIsDifficultyModalOpen(false);
-      fetchRandomWord();
-    }, 500);
   };
 
   return (
