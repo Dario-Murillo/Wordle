@@ -4,15 +4,16 @@ import globals from 'globals';
 const compat = new FlatCompat();
 
 export default [
+  ...compat.extends('airbnb'),
+  ...compat.extends('plugin:prettier/recommended'),
+
   {
-    files: ['eslint.config.mjs'],
+    files: ['eslint.config.*', '*.cjs', '*.mjs'],
     rules: {
       'import/no-extraneous-dependencies': 'off',
     },
   },
 
-  ...compat.extends('airbnb'),
-  ...compat.extends('plugin:prettier/recommended'),
   {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
