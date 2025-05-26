@@ -1,4 +1,5 @@
 import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
 
 const compat = new FlatCompat();
 
@@ -7,8 +8,10 @@ export default [
   ...compat.extends('plugin:prettier/recommended'),
   {
     files: ['**/*.js', '**/*.jsx'],
-    env: {
-      browser: true,
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.browser,
     },
     rules: {
       'react/react-in-jsx-scope': 'off',
