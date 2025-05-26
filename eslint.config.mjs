@@ -5,7 +5,7 @@ const compat = new FlatCompat();
 
 export default [
   {
-    files: ['eslint.config.js'],
+    files: ['eslint.config.mjs'],
     rules: {
       'import/no-extraneous-dependencies': 'off',
     },
