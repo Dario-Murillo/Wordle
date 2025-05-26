@@ -20,15 +20,6 @@ export default function Game() {
     }
   }, []);
 
-  const handleDifficultySelect = (difficulty) => {
-    setModalVisible(false);
-    setTimeout(() => {
-      setIsDifficultyModalOpen(false);
-      localStorage.setItem('difficulty', difficulty);
-      fetchRandomWord();
-    }, 500);
-  };
-
   const fetchRandomWord = async () => {
     try {
       const res = await fetch('/words.txt');
@@ -43,6 +34,15 @@ export default function Game() {
     } catch (error) {
       console.error('Failed to load words:', error);
     }
+  };
+
+  const handleDifficultySelect = (difficulty) => {
+    setModalVisible(false);
+    setTimeout(() => {
+      setIsDifficultyModalOpen(false);
+      localStorage.setItem('difficulty', difficulty);
+      fetchRandomWord();
+    }, 500);
   };
 
   return (
@@ -60,12 +60,14 @@ export default function Game() {
 
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center">
               <button
+                type="button"
                 onClick={() => handleDifficultySelect('normal')}
                 className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
               >
                 Normal
               </button>
               <button
+                type="button"
                 onClick={() => handleDifficultySelect('hard')}
                 className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
               >

@@ -7,10 +7,14 @@ export default [
   ...compat.extends('plugin:prettier/recommended'),
   {
     files: ['**/*.js', '**/*.jsx'],
+    env: {
+      browser: true,
+    },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'import/no-extraneous-dependencies': 'off',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
   {
