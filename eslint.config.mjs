@@ -4,6 +4,13 @@ import globals from 'globals';
 const compat = new FlatCompat();
 
 export default [
+  {
+    files: ['eslint.config.js'],
+    rules: {
+      'import/no-extraneous-dependencies': 'off',
+    },
+  },
+
   ...compat.extends('airbnb'),
   ...compat.extends('plugin:prettier/recommended'),
   {
