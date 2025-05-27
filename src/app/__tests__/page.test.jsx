@@ -1,7 +1,17 @@
 import { expect, test, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import RootLayout from '../layout';
 import Home from '../page';
+
+const mockPush = vi.fn();
+
+vi.mock('next/navigation', async () => {
+  return {
+    useRouter: () => ({
+      push: mockPush,
+    }),
+  };
+});
 
 test('carga Wordle heading', () => {
   render(<Home />);
@@ -58,4 +68,13 @@ test('carga layout con children', () => {
   expect(
     screen.getByRole('heading', { level: 1, name: 'Hola' }),
   ).toBeInTheDocument();
+});
+
+test('boton de jugar lleva a la pantalla del juego', () => {
+  render(<Home />);
+
+  const playButton = screen.getByRole('button', { name: /Jugar/i });
+  fireEvent.click(playButton);
+
+  expect(mockPush).toHaveBeenCalledWith('/game');
 });

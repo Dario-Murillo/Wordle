@@ -1,6 +1,11 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
@@ -30,6 +35,7 @@ export default function Home() {
           <button
             type="button"
             className="rounded-full font-[family-name:var(--font-karla)] border border-solid text-white bg-black dark:border-white/[.145] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
+            onClick={() => router.push('/game')}
           >
             Jugar
           </button>
