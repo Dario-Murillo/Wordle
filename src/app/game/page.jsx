@@ -23,7 +23,7 @@ export default function Game() {
 
   const fetchRandomWord = async () => {
     try {
-      const res = await fetch('/words.txt');
+      const res = await fetch('/solutionWords.txt');
       const text = await res.text();
       const words = text
         .split('\n')

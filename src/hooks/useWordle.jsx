@@ -1,9 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useWordle = (solution) => {
   const [turn, setTurn] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
   const [guesses, setGuesses] = useState([...Array(6)]);
+  const [validWords, setValidWords] = useState(new Set());
+
+  useEffect(() => {
+    const loadWords = async () => {
+      const res = await fetch('/validWords.txt');
+      const text = await res.text();
+      const words = text
+        .split('\n')
+        .map((w) => w.trim().toLowerCase())
+        .filter(Boolean);
+      setValidWords(new Set(words));
+    };
+
+    loadWords();
+  }, []);
 
   const formatGuess = () => {
     let formattedGuess = [...currentGuess].map((letter) => {
@@ -33,6 +48,10 @@ const useWordle = (solution) => {
         return;
       }
       if (currentGuess.length !== 5) {
+        return;
+      }
+      if (!validWords.has(currentGuess.toLowerCase())) {
+        alert('Not a valid word!');
         return;
       }
       const formatted = formatGuess();
