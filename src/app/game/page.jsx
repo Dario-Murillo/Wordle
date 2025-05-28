@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Wordle from '@/components/Wordle';
 
 export default function Game() {
   const [isDifficultyModalOpen, setIsDifficultyModalOpen] = useState(true);
@@ -79,9 +80,7 @@ export default function Game() {
       )}
 
       <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
-        {secretWord && (
-          <p className="text-white">Palabra secreta: {secretWord}</p>
-        )}
+        {secretWord && <Wordle secretWord={secretWord} />}
       </main>
     </div>
   );
