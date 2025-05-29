@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Wordle from '@/components/Wordle';
+import Wordle from '../../components/Wordle';
 
 export default function Game() {
   const [isDifficultyModalOpen, setIsDifficultyModalOpen] = useState(true);

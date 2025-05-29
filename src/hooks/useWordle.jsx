@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { formatGuess, addNewGuess, handleKeyup } from './useWordleHelpers';
 
 const useWordle = (solution) => {
   const [turn, setTurn] = useState(0);
@@ -20,55 +21,23 @@ const useWordle = (solution) => {
     loadWords();
   }, []);
 
-  const formatGuess = () => {
-    let formattedGuess = [...currentGuess].map((letter) => {
-      return { key: letter, color: 'gray' };
-    });
-
-    return formattedGuess;
+  return {
+    turn,
+    currentGuess,
+    guesses,
+    handleKeyup: (event) =>
+      handleKeyup({
+        key: event.key,
+        currentGuess,
+        turn,
+        validWords,
+        setCurrentGuess,
+        setGuesses,
+        setTurn,
+        addNewGuess,
+        formatGuess,
+      }),
   };
-
-  const addNewGuess = (formattedGuess) => {
-    setGuesses((prevGuesses) => {
-      let newGuesses = [...prevGuesses];
-      newGuesses[turn] = formattedGuess;
-      return newGuesses;
-    });
-
-    setTurn((prevTurn) => {
-      return prevTurn + 1;
-    });
-
-    setCurrentGuess('');
-  };
-
-  const handleKeyup = ({ key }) => {
-    if (key === 'Enter') {
-      if (turn > 5) {
-        return;
-      }
-      if (currentGuess.length !== 5) {
-        return;
-      }
-      if (!validWords.has(currentGuess.toLowerCase())) {
-        alert('Not a valid word!');
-        return;
-      }
-      const formatted = formatGuess();
-      addNewGuess(formatted);
-    }
-    if (key === 'Backspace') {
-      setCurrentGuess((prev) => prev.slice(0, -1));
-      return;
-    }
-    if (/^[A-Za-z]$/.test(key)) {
-      if (currentGuess.length < 5) {
-        setCurrentGuess((prev) => prev + key);
-      }
-    }
-  };
-
-  return { turn, currentGuess, guesses, handleKeyup };
 };
 
 export default useWordle;
