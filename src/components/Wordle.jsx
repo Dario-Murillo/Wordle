@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import useWordle from '../hooks/useWordle';
 import Grid from './Grid';
 
-export default function Wordle({ secretWord }) {
-  const { currentGuess, guesses, turn, handleKeyup } = useWordle(secretWord);
+export default function Wordle() {
+  const { currentGuess, guesses, turn, handleKeyup } = useWordle();
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);
@@ -12,18 +11,11 @@ export default function Wordle({ secretWord }) {
     return () => window.removeEventListener('keyup', handleKeyup);
   }, [handleKeyup]);
 
-  useEffect(() => {
-    console.log(guesses, turn);
-  }, [guesses, turn]);
+  useEffect(() => {}, [guesses, turn]);
 
   return (
     <div>
-      <div>secret word - {secretWord}</div>
       <Grid guesses={guesses} currentGuess={currentGuess} turn={turn} />
     </div>
   );
 }
-
-Wordle.propTypes = {
-  secretWord: PropTypes.string.isRequired,
-};

@@ -6,10 +6,11 @@ export default function Row({ guess, currentGuess }) {
     return (
       <div data-testid="row" className="flex justify-center gap-1 mb-2">
         {guess.map((l, i) => {
-          let bgColor = '#3A3A3C';
+          const bgColor = '#3A3A3C';
           return (
             <div
-              key={i}
+              /* eslint-disable-next-line react/no-array-index-key */
+              key={`${l}-${i}`}
               data-testid="tile"
               className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 text-white border-none"
               style={{ backgroundColor: bgColor }}
@@ -28,7 +29,8 @@ export default function Row({ guess, currentGuess }) {
       <div data-testid="row" className="flex justify-center gap-1 mb-2">
         {letters.map((letter, i) => (
           <div
-            key={`letter-${i}`}
+            /* eslint-disable-next-line react/no-array-index-key */
+            key={`letter-${letter}-${i}`}
             data-testid="tile"
             className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 text-white border-2 border-[#565758]"
           >
@@ -37,10 +39,11 @@ export default function Row({ guess, currentGuess }) {
         ))}
         {[...Array(5 - letters.length)].map((_, i) => (
           <div
-            key={`empty-${i}`}
+            /* eslint-disable-next-line react/no-array-index-key */
+            key={`empty-${_}-${i}`}
             data-testid="tile"
             className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 border-[#3A3A3C]"
-          ></div>
+          />
         ))}
       </div>
     );
@@ -50,16 +53,29 @@ export default function Row({ guess, currentGuess }) {
     <div data-testid="row" className="flex justify-center gap-1 mb-2">
       {[...Array(5)].map((_, i) => (
         <div
-          key={i}
+          /* eslint-disable-next-line react/no-array-index-key */
+          key={`${_}-${i}`}
           data-testid="tile"
           className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 border-[#3A3A3C]"
-        ></div>
+        />
       ))}
     </div>
   );
 }
 
 Row.propTypes = {
-  guess: PropTypes.array.isRequired,
+  guess: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        color: PropTypes.string.isRequired,
+      }),
+    ),
+    PropTypes.oneOf([null]),
+  ]),
   currentGuess: PropTypes.string.isRequired,
+};
+
+Row.defaultProps = {
+  guess: null,
 };

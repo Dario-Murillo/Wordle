@@ -33,8 +33,8 @@ export const handleKeyup = ({
   setCurrentGuess,
   setGuesses,
   setTurn,
-  addNewGuess,
-  formatGuess,
+  formatGuess: injectedFormatGuess = formatGuess,
+  addNewGuess: injectedAddNewGuess = addNewGuess,
 }) => {
   if (key === 'Enter') {
     if (turn > 5) {
@@ -44,11 +44,11 @@ export const handleKeyup = ({
       return;
     }
     if (!validWords.has(currentGuess.toLowerCase())) {
-      alert('Not a valid word!');
+      console.error('Not a valid word!');
       return;
     }
-    const formatted = formatGuess(currentGuess);
-    addNewGuess(turn, formatted, setGuesses, setTurn, setCurrentGuess);
+    const formatted = injectedFormatGuess(currentGuess);
+    injectedAddNewGuess(turn, formatted, setGuesses, setTurn, setCurrentGuess);
   }
 
   if (key === 'Backspace') {

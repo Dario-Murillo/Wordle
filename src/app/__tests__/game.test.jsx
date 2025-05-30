@@ -1,4 +1,4 @@
-import { expect, test, vi, beforeEach } from 'vitest';
+import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import Game from '../game/page';
 import Wordle from '../../components/Wordle';

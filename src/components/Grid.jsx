@@ -7,16 +7,25 @@ export default function Grid({ guesses, currentGuess, turn }) {
     <div>
       {guesses.map((g, i) => {
         if (turn === i) {
-          return <Row key={i} currentGuess={currentGuess} />;
+          /* eslint-disable-next-line react/no-array-index-key */
+          return <Row key={`${g}-${i}`} currentGuess={currentGuess} />;
         }
-        return <Row key={i} guess={g} />;
+        /* eslint-disable-next-line react/no-array-index-key */
+        return <Row key={`${g}-${i}`} guess={g} />;
       })}
     </div>
   );
 }
 
 Grid.propTypes = {
-  guesses: PropTypes.array.isRequired,
+  guesses: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        color: PropTypes.string.isRequired,
+      }),
+    ),
+  ).isRequired,
   currentGuess: PropTypes.string.isRequired,
   turn: PropTypes.number.isRequired,
 };
