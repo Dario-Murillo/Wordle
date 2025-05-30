@@ -37,10 +37,7 @@ export const handleKeyup = ({
   addNewGuess: injectedAddNewGuess = addNewGuess,
 }) => {
   if (key === 'Enter') {
-    if (turn > 5) {
-      return;
-    }
-    if (currentGuess.length !== 5) {
+    if (turn > 5 || currentGuess.length !== 5) {
       return;
     }
     if (!validWords.has(currentGuess.toLowerCase())) {

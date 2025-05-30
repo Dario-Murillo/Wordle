@@ -1,24 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tile from './Tile';
 
 export default function Row({ guess, currentGuess }) {
   if (Array.isArray(guess)) {
     return (
       <div data-testid="row" className="flex justify-center gap-1 mb-2">
-        {guess.map((l, i) => {
-          const bgColor = '#3A3A3C';
-          return (
-            <div
-              /* eslint-disable-next-line react/no-array-index-key */
-              key={`${l}-${i}`}
-              data-testid="tile"
-              className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 text-white border-none"
-              style={{ backgroundColor: bgColor }}
-            >
-              {l.key}
-            </div>
-          );
-        })}
+        {guess.map((l, i) => (
+          <Tile
+            /* eslint-disable-next-line react/no-array-index-key */
+            key={`${l.key}-${i}`}
+            letter={l.key}
+            bgColor="#3A3A3C"
+          />
+        ))}
       </div>
     );
   }
@@ -28,22 +23,16 @@ export default function Row({ guess, currentGuess }) {
     return (
       <div data-testid="row" className="flex justify-center gap-1 mb-2">
         {letters.map((letter, i) => (
-          <div
+          <Tile
             /* eslint-disable-next-line react/no-array-index-key */
             key={`letter-${letter}-${i}`}
-            data-testid="tile"
-            className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 text-white border-2 border-[#565758]"
-          >
-            {letter}
-          </div>
+            letter={letter}
+            borderColor="#565758"
+          />
         ))}
         {[...Array(5 - letters.length)].map((_, i) => (
-          <div
-            /* eslint-disable-next-line react/no-array-index-key */
-            key={`empty-${_}-${i}`}
-            data-testid="tile"
-            className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 border-[#3A3A3C]"
-          />
+          /* eslint-disable-next-line react/no-array-index-key */
+          <Tile key={`empty-${_}-${i}`} />
         ))}
       </div>
     );
@@ -52,12 +41,8 @@ export default function Row({ guess, currentGuess }) {
   return (
     <div data-testid="row" className="flex justify-center gap-1 mb-2">
       {[...Array(5)].map((_, i) => (
-        <div
-          /* eslint-disable-next-line react/no-array-index-key */
-          key={`${_}-${i}`}
-          data-testid="tile"
-          className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 border-[#3A3A3C]"
-        />
+        /* eslint-disable-next-line react/no-array-index-key */
+        <Tile key={`${_}-${i}`} />
       ))}
     </div>
   );

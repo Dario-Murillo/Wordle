@@ -107,7 +107,7 @@ test('intentos anteriores se muestran en la matriz con el color correspondiente'
 
   render(<Grid guesses={guesses} currentGuess={currentGuess} turn={turn} />);
 
-  const tiles = screen.getAllByTestId('tile');
+  const tiles = screen.queryAllByTestId('tile');
 
   expect(tiles[0].textContent).toBe('w');
   expect(tiles[0]).toHaveStyle({ backgroundColor: '#3A3A3C' });
@@ -129,8 +129,8 @@ test('fila despliega letras escritas y casillas vacias para el intento actual', 
   expect(tiles[1].textContent).toBe('o');
   expect(tiles[2].textContent).toBe('');
 
-  expect(tiles[0]).toHaveClass('border-[#565758]');
-  expect(tiles[2]).toHaveClass('border-[#3A3A3C]');
+  expect(tiles[0]).toHaveStyle('border: 2px solid #565758');
+  expect(tiles[2]).toHaveStyle('border: 2px solid #3A3A3C');
 });
 
 test('formateo del intento a un array de objetos con cada letra y su color', () => {
