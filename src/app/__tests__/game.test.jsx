@@ -4,6 +4,7 @@ import Game from '../game/page';
 import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
+import Tile from '../../components/Tile';
 import {
   formatGuess,
   addNewGuess,
@@ -358,4 +359,28 @@ test('handleKeyup permite ingresar el intento', async () => {
     expect(letters.startsWith('hello')).toBe(true);
     expect(letters.slice(5, 10)).toBe('');
   });
+});
+
+test('tile tiene la clase flip cuando se le pasa bgColor', () => {
+  render(
+    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0} />,
+  );
+
+  const tile = screen.getByTestId('tile');
+  expect(tile).toHaveClass('flip');
+});
+
+test('tile no tiene la clase flip cuando no se le pasa bgColor', () => {
+  render(<Tile letter="w" />);
+  const tile = screen.getByTestId('tile');
+  expect(tile).not.toHaveClass('flip');
+});
+
+test('tile setea el retraso de animacion correctamente', () => {
+  render(
+    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0.3} />,
+  );
+
+  const tile = screen.getByTestId('tile');
+  expect(tile.style.animationDelay).toBe('0.3s');
 });
