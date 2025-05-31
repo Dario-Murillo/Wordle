@@ -1,9 +1,27 @@
 // Helper function to format a guess
-export const formatGuess = (currentGuess) => {
-  return [...currentGuess].map((letter) => ({
-    key: letter,
-    color: 'gray',
-  }));
+export const formatGuess = (solution, currentGuess) => {
+  const solutionArray = [...solution];
+  const formattedGuess = [...currentGuess].map((letter) => {
+    return { key: letter, color: 'gray' };
+  });
+
+  // find any green letters
+  formattedGuess.forEach((letter, i) => {
+    if (solution[i] === letter.key) {
+      formattedGuess[i].color = 'green';
+      solutionArray[i] = null;
+    }
+  });
+
+  // find any yellow letters
+  formattedGuess.forEach((letter, i) => {
+    if (solutionArray.includes(letter.key) && letter.color !== 'green') {
+      formattedGuess[i].color = 'yellow';
+      solutionArray[solutionArray.indexOf(letter.key)] = null;
+    }
+  });
+
+  return formattedGuess;
 };
 
 // Helper function to add a new guess
@@ -33,6 +51,7 @@ export const handleKeyup = ({
   setCurrentGuess,
   setGuesses,
   setTurn,
+  solution,
   formatGuess: injectedFormatGuess = formatGuess,
   addNewGuess: injectedAddNewGuess = addNewGuess,
 }) => {
@@ -44,7 +63,7 @@ export const handleKeyup = ({
       console.error('Not a valid word!');
       return;
     }
-    const formatted = injectedFormatGuess(currentGuess);
+    const formatted = injectedFormatGuess(solution, currentGuess);
     injectedAddNewGuess(turn, formatted, setGuesses, setTurn, setCurrentGuess);
   }
 

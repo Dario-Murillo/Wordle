@@ -4,6 +4,12 @@ import Tile from './Tile';
 
 export default function Row({ guess, currentGuess }) {
   if (Array.isArray(guess)) {
+    const colorMap = {
+      green: '#538D4E',
+      yellow: '#B59F3B',
+      gray: '#3A3A3C',
+    };
+
     return (
       <div data-testid="row" className="flex justify-center gap-1 mb-2">
         {guess.map((l, i) => (
@@ -11,7 +17,9 @@ export default function Row({ guess, currentGuess }) {
             /* eslint-disable-next-line react/no-array-index-key */
             key={`${l.key}-${i}`}
             letter={l.key}
-            bgColor="#3A3A3C"
+            bgColor={colorMap[l.color]}
+            borderColor={colorMap[l.color]}
+            flipDelay={i * 0.2}
           />
         ))}
       </div>
@@ -28,6 +36,7 @@ export default function Row({ guess, currentGuess }) {
             key={`letter-${letter}-${i}`}
             letter={letter}
             borderColor="#565758"
+            shouldPop={!!letter}
           />
         ))}
         {[...Array(5 - letters.length)].map((_, i) => (

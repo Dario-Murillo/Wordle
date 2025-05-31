@@ -4,6 +4,7 @@ import Game from '../game/page';
 import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
+import Tile from '../../components/Tile';
 import {
   formatGuess,
   addNewGuess,
@@ -110,7 +111,7 @@ test('intentos anteriores se muestran en la matriz con el color correspondiente'
   const tiles = screen.queryAllByTestId('tile');
 
   expect(tiles[0].textContent).toBe('w');
-  expect(tiles[0]).toHaveStyle({ backgroundColor: '#3A3A3C' });
+  expect(tiles[0].style.getPropertyValue('--background')).toBe('#3A3A3C');
 });
 
 test('fila despliega letras escritas y casillas vacias para el intento actual', () => {
@@ -129,25 +130,27 @@ test('fila despliega letras escritas y casillas vacias para el intento actual', 
   expect(tiles[1].textContent).toBe('o');
   expect(tiles[2].textContent).toBe('');
 
-  expect(tiles[0]).toHaveStyle('border: 2px solid #565758');
-  expect(tiles[2]).toHaveStyle('border: 2px solid #3A3A3C');
+  expect(tiles[0]).toHaveStyle({ borderColor: '#565758' });
+  expect(tiles[2]).toHaveStyle({ borderColor: '#3A3A3C' });
 });
 
 test('formateo del intento a un array de objetos con cada letra y su color', () => {
   const guess = 'hello';
+  const secretWord = 'table';
   const expected = [
     { key: 'h', color: 'gray' },
-    { key: 'e', color: 'gray' },
+    { key: 'e', color: 'yellow' },
     { key: 'l', color: 'gray' },
-    { key: 'l', color: 'gray' },
+    { key: 'l', color: 'green' },
     { key: 'o', color: 'gray' },
   ];
 
-  expect(formatGuess(guess)).toEqual(expected);
+  expect(formatGuess(secretWord, guess)).toEqual(expected);
 });
 
 test('formateo del intento retorna un array vacio si el intento es vacio', () => {
-  expect(formatGuess('')).toEqual([]);
+  const secretWord = 'table';
+  expect(formatGuess(secretWord, '')).toEqual([]);
 });
 
 test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
@@ -202,16 +205,17 @@ describe('handleKeyup', () => {
     mockSetTurn = vi.fn();
     mockAddNewGuess = vi.fn();
     mockFormatGuess = vi.fn().mockReturnValue([
-      { key: 't', color: 'gray' },
-      { key: 'a', color: 'gray' },
-      { key: 'b', color: 'gray' },
-      { key: 'l', color: 'gray' },
-      { key: 'e', color: 'gray' },
+      { key: 't', color: 'green' },
+      { key: 'a', color: 'green' },
+      { key: 'b', color: 'green' },
+      { key: 'l', color: 'green' },
+      { key: 'e', color: 'green' },
     ]);
     validWords = new Set(['table']);
   });
 
   test('se permite ingresar un intento valido con Enter', () => {
+    const solution = 'table';
     const currentGuess = 'table';
 
     handleKeyup({
@@ -222,19 +226,20 @@ describe('handleKeyup', () => {
       setCurrentGuess: mockSetCurrentGuess,
       setGuesses: mockSetGuesses,
       setTurn: mockSetTurn,
+      solution,
       addNewGuess: mockAddNewGuess,
       formatGuess: mockFormatGuess,
     });
 
-    expect(mockFormatGuess).toHaveBeenCalledWith(currentGuess);
+    expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
     expect(mockAddNewGuess).toHaveBeenCalledWith(
       2,
       [
-        { key: 't', color: 'gray' },
-        { key: 'a', color: 'gray' },
-        { key: 'b', color: 'gray' },
-        { key: 'l', color: 'gray' },
-        { key: 'e', color: 'gray' },
+        { key: 't', color: 'green' },
+        { key: 'a', color: 'green' },
+        { key: 'b', color: 'green' },
+        { key: 'l', color: 'green' },
+        { key: 'e', color: 'green' },
       ],
       mockSetGuesses,
       mockSetTurn,
@@ -354,4 +359,28 @@ test('handleKeyup permite ingresar el intento', async () => {
     expect(letters.startsWith('hello')).toBe(true);
     expect(letters.slice(5, 10)).toBe('');
   });
+});
+
+test('tile tiene la clase flip cuando se le pasa bgColor', () => {
+  render(
+    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0} />,
+  );
+
+  const tile = screen.getByTestId('tile');
+  expect(tile).toHaveClass('flip');
+});
+
+test('tile no tiene la clase flip cuando no se le pasa bgColor', () => {
+  render(<Tile letter="w" />);
+  const tile = screen.getByTestId('tile');
+  expect(tile).not.toHaveClass('flip');
+});
+
+test('tile setea el retraso de animacion correctamente', () => {
+  render(
+    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0.3} />,
+  );
+
+  const tile = screen.getByTestId('tile');
+  expect(tile.style.animationDelay).toBe('0.3s');
 });
