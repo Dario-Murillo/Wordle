@@ -19,6 +19,7 @@ export default function Row({ guess, currentGuess }) {
             letter={l.key}
             bgColor={colorMap[l.color]}
             borderColor={colorMap[l.color]}
+            flipDelay={i * 0.2}
           />
         ))}
       </div>
@@ -35,6 +36,7 @@ export default function Row({ guess, currentGuess }) {
             key={`letter-${letter}-${i}`}
             letter={letter}
             borderColor="#565758"
+            shouldPop={!!letter}
           />
         ))}
         {[...Array(5 - letters.length)].map((_, i) => (
