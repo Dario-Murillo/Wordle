@@ -135,19 +135,21 @@ test('fila despliega letras escritas y casillas vacias para el intento actual', 
 
 test('formateo del intento a un array de objetos con cada letra y su color', () => {
   const guess = 'hello';
+  const secretWord = 'table';
   const expected = [
     { key: 'h', color: 'gray' },
-    { key: 'e', color: 'gray' },
+    { key: 'e', color: 'yellow' },
     { key: 'l', color: 'gray' },
-    { key: 'l', color: 'gray' },
+    { key: 'l', color: 'green' },
     { key: 'o', color: 'gray' },
   ];
 
-  expect(formatGuess(guess)).toEqual(expected);
+  expect(formatGuess(secretWord, guess)).toEqual(expected);
 });
 
 test('formateo del intento retorna un array vacio si el intento es vacio', () => {
-  expect(formatGuess('')).toEqual([]);
+  const secretWord = 'table';
+  expect(formatGuess(secretWord, '')).toEqual([]);
 });
 
 test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
@@ -202,16 +204,17 @@ describe('handleKeyup', () => {
     mockSetTurn = vi.fn();
     mockAddNewGuess = vi.fn();
     mockFormatGuess = vi.fn().mockReturnValue([
-      { key: 't', color: 'gray' },
-      { key: 'a', color: 'gray' },
-      { key: 'b', color: 'gray' },
-      { key: 'l', color: 'gray' },
-      { key: 'e', color: 'gray' },
+      { key: 't', color: 'green' },
+      { key: 'a', color: 'green' },
+      { key: 'b', color: 'green' },
+      { key: 'l', color: 'green' },
+      { key: 'e', color: 'green' },
     ]);
     validWords = new Set(['table']);
   });
 
   test('se permite ingresar un intento valido con Enter', () => {
+    const solution = 'table';
     const currentGuess = 'table';
 
     handleKeyup({
@@ -222,19 +225,20 @@ describe('handleKeyup', () => {
       setCurrentGuess: mockSetCurrentGuess,
       setGuesses: mockSetGuesses,
       setTurn: mockSetTurn,
+      solution,
       addNewGuess: mockAddNewGuess,
       formatGuess: mockFormatGuess,
     });
 
-    expect(mockFormatGuess).toHaveBeenCalledWith(currentGuess);
+    expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
     expect(mockAddNewGuess).toHaveBeenCalledWith(
       2,
       [
-        { key: 't', color: 'gray' },
-        { key: 'a', color: 'gray' },
-        { key: 'b', color: 'gray' },
-        { key: 'l', color: 'gray' },
-        { key: 'e', color: 'gray' },
+        { key: 't', color: 'green' },
+        { key: 'a', color: 'green' },
+        { key: 'b', color: 'green' },
+        { key: 'l', color: 'green' },
+        { key: 'e', color: 'green' },
       ],
       mockSetGuesses,
       mockSetTurn,
