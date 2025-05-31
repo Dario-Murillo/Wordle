@@ -43,7 +43,12 @@ export default function LoginPage() {
                 <p>{error}</p>
               </div>
             )}{' '}
-            <label htmlFor="email" className="text-sm mt-1.5 text-gray-700">
+            <label
+              data-testid="email-label"
+              htmlFor="email"
+              aria-label="email"
+              className="text-sm mt-1.5 text-gray-700"
+            >
               Correo electrónico <span className="text-red-500">*</span>
             </label>
             <input
@@ -55,19 +60,25 @@ export default function LoginPage() {
               aria-labelledby="email-label"
             />
             <div className="flex flex-row">
-              <label htmlFor="password" className="text-sm text-gray-700">
+              <label
+                data-testid="password-label"
+                htmlFor="password"
+                aria-label="contraseña"
+                className="text-sm text-gray-700"
+              >
                 Contraseña <span className="text-red-500">*</span>
               </label>
-              <p
+              <a
                 href="/recovery"
                 className="text-sm text-blue-500 hover:underline ml-auto"
               >
                 ¿Olvidaste tu contraseña?
-              </p>
+              </a>
             </div>
             <div className="relative mb-4">
               <input
                 type={isVisible ? 'text' : 'password'}
+                id="password"
                 name="password"
                 className="w-full p-2 border border-gray-300 rounded text-black"
                 placeholder="Ingresa tu contraseña..."
