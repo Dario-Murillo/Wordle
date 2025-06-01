@@ -7,6 +7,7 @@ on:
       - develop
       - 'feature/**'
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - main
       - develop
@@ -29,7 +30,7 @@ jobs:
           node-version: 18
           cache: 'npm'
 
-      - name: 📦 Instalar dependencias
+      - name: 📦 Instalar Dependencias
         run: npm ci
 
       - name: 🔍 Ejecutar ESLint
@@ -38,5 +39,13 @@ jobs:
       - name: 🥀 Ejecutar Prettier
         run: npm run format:check
 
-      - name: 🧪 Ejecutar pruebas
+      - name: 🧪 Ejecutar Pruebas
         run: npm run test
+
+      - name: 🧪 Ejecutar Pruebas con Cobertura
+        run: npm run test:coverage
+
+      - name: 🖖SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

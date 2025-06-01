@@ -41,5 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # sonar qube configuration file
-sonar-project.properties
 .scannerwork
