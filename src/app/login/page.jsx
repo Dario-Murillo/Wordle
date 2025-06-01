@@ -77,6 +77,7 @@ export default function LoginPage() {
             </div>
             <div className="relative mb-4">
               <input
+                data-testid="password-input"
                 type={isVisible ? 'text' : 'password'}
                 id="password"
                 name="password"
@@ -84,6 +85,7 @@ export default function LoginPage() {
                 placeholder="Ingresa tu contraseña..."
               />
               <button
+                data-testid="toggle-button"
                 type="button"
                 onClick={toggleVisibility}
                 className="absolute inset-y-0 right-0 flex items-center px-3"
