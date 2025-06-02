@@ -155,6 +155,9 @@ test('formateo del intento retorna un array vacio si el intento es vacio', () =>
 
 test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   const turn = 0;
+  const currentGuess = 'hello';
+  const solution = 'world';
+
   const formatted = [
     { key: 'h', color: 'gray' },
     { key: 'e', color: 'gray' },
@@ -166,14 +169,18 @@ test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   const mockSetGuesses = vi.fn();
   const mockSetTurn = vi.fn();
   const mockSetCurrentGuess = vi.fn();
+  const mockSetIsCorrect = vi.fn();
 
-  addNewGuess(
+  addNewGuess({
     turn,
-    formatted,
-    mockSetGuesses,
-    mockSetTurn,
-    mockSetCurrentGuess,
-  );
+    formattedGuess: formatted,
+    currentGuess,
+    solution,
+    setGuesses: mockSetGuesses,
+    setTurn: mockSetTurn,
+    setCurrentGuess: mockSetCurrentGuess,
+    setIsCorrect: mockSetIsCorrect,
+  });
 
   expect(mockSetGuesses).toHaveBeenCalledTimes(1);
   const setGuessesCallback = mockSetGuesses.mock.calls[0][0];
@@ -190,6 +197,7 @@ test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
 
   expect(mockSetCurrentGuess).toHaveBeenCalledWith('');
 });
+
 
 describe('handleKeyup', () => {
   let mockSetCurrentGuess;
@@ -214,38 +222,55 @@ describe('handleKeyup', () => {
     validWords = new Set(['table']);
   });
 
-  test('se permite ingresar un intento valido con Enter', () => {
-    const solution = 'table';
-    const currentGuess = 'table';
+test('se permite ingresar un intento válido con Enter', () => {
+  const solution = 'table';
+  const currentGuess = 'table';
 
-    handleKeyup({
-      key: 'Enter',
-      currentGuess,
-      turn: 2,
-      validWords,
-      setCurrentGuess: mockSetCurrentGuess,
-      setGuesses: mockSetGuesses,
-      setTurn: mockSetTurn,
-      solution,
-      addNewGuess: mockAddNewGuess,
-      formatGuess: mockFormatGuess,
-    });
+  const formattedGuess = [
+    { key: 't', color: 'green' },
+    { key: 'a', color: 'green' },
+    { key: 'b', color: 'green' },
+    { key: 'l', color: 'green' },
+    { key: 'e', color: 'green' },
+  ];
 
-    expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
-    expect(mockAddNewGuess).toHaveBeenCalledWith(
-      2,
-      [
-        { key: 't', color: 'green' },
-        { key: 'a', color: 'green' },
-        { key: 'b', color: 'green' },
-        { key: 'l', color: 'green' },
-        { key: 'e', color: 'green' },
-      ],
-      mockSetGuesses,
-      mockSetTurn,
-      mockSetCurrentGuess,
-    );
+  const mockSetCurrentGuess = vi.fn();
+  const mockSetGuesses = vi.fn();
+  const mockSetTurn = vi.fn();
+  const mockSetIsCorrect = vi.fn();
+
+  const mockFormatGuess = vi.fn(() => formattedGuess);
+  const mockAddNewGuess = vi.fn();
+
+  const validWords = new Set(['table']);
+
+  handleKeyup({
+    key: 'Enter',
+    currentGuess,
+    turn: 2,
+    validWords,
+    setCurrentGuess: mockSetCurrentGuess,
+    setGuesses: mockSetGuesses,
+    setTurn: mockSetTurn,
+    setIsCorrect: mockSetIsCorrect,
+    solution,
+    addNewGuess: mockAddNewGuess,
+    formatGuess: mockFormatGuess,
   });
+
+  expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
+
+  expect(mockAddNewGuess).toHaveBeenCalledWith({
+    turn: 2,
+    formattedGuess,
+    currentGuess,
+    solution,
+    setGuesses: mockSetGuesses,
+    setTurn: mockSetTurn,
+    setCurrentGuess: mockSetCurrentGuess,
+    setIsCorrect: mockSetIsCorrect,
+  });
+});
 
   test('letras del intento actual se quitan con Backspace', () => {
     handleKeyup({

@@ -25,13 +25,19 @@ export const formatGuess = (solution, currentGuess) => {
 };
 
 // Helper function to add a new guess
-export const addNewGuess = (
+export const addNewGuess = ({
   turn,
   formattedGuess,
+  currentGuess,
+  solution,
   setGuesses,
   setTurn,
   setCurrentGuess,
-) => {
+  setIsCorrect,
+}) => {
+  if (currentGuess === solution) {
+    setIsCorrect(true);
+  }
   setGuesses((prevGuesses) => {
     const newGuesses = [...prevGuesses];
     newGuesses[turn] = formattedGuess;
@@ -50,6 +56,7 @@ export const handleKeyup = ({
   validWords,
   setCurrentGuess,
   setGuesses,
+  setIsCorrect,
   setTurn,
   solution,
   formatGuess: injectedFormatGuess = formatGuess,
@@ -63,8 +70,17 @@ export const handleKeyup = ({
       console.error('Not a valid word!');
       return;
     }
-    const formatted = injectedFormatGuess(solution, currentGuess);
-    injectedAddNewGuess(turn, formatted, setGuesses, setTurn, setCurrentGuess);
+    const formattedGuess = injectedFormatGuess(solution, currentGuess);
+    injectedAddNewGuess({
+      turn,
+      formattedGuess,
+      currentGuess,
+      solution,
+      setGuesses,
+      setTurn,
+      setCurrentGuess,
+      setIsCorrect,
+    });
   }
 
   if (key === 'Backspace') {
