@@ -3,6 +3,7 @@
 import createClient from '../../utils/supabase/server';
 
 function validateEmail(email) {
+  if (typeof email !== 'string' || email.length > 254) return false;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
