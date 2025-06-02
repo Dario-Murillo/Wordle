@@ -29,7 +29,7 @@ export default function LoginPage() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
-        <div className="p-10 bg-white rounded-2xl shadow-lg w-full max-w-md border-gray-400 border">
+        <div className="p-10 bg-white rounded-2xl shadow-lg w-full min-w-[425px] max-w-2xl border-gray-400 border">
           <h1 className="mx-auto mb-1.5 font-[family-name:var(--font-alfaslabone)] text-[48px] tracking-wide sm:text-[40px] leading-[1.2] text-center text-black">
             Iniciar Sesión
           </h1>
