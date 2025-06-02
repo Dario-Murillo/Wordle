@@ -2,29 +2,16 @@
 
 'use client';
 
-import { useState, useActionState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useActionState } from 'react';
 import { Eye, EyeOff, X, Check } from 'lucide-react';
 import registerAction from './actions';
+import useSignupToastRedirect from '../../hooks/useSignupToastRedirect';
+import usePasswordVisibility from '../../hooks/usePasswordVisibility';
 
-export default function signupPage() {
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleVisibility = () => setIsVisible((prev) => !prev);
-
+export default function SignupPage() {
+  const [isVisible, toggleVisibility] = usePasswordVisibility();
   const [state, formAction] = useActionState(registerAction, { error: null });
-  const [showToast, setShowToast] = useState(true);
-
-  const router = useRouter();
-  useEffect(() => {
-    if (state.success && showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-        router.push('/login');
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [state.success, showToast, router]);
+  const [showToast, setShowToast] = useSignupToastRedirect(state.success);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-karla)]">
