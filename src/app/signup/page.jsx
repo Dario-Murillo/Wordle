@@ -47,6 +47,7 @@ export default function signupPage() {
               Correo electrónico <span className="text-red-500">*</span>
             </label>
             <input
+              data-testid="email-input"
               id="email"
               name="email"
               type="email"
