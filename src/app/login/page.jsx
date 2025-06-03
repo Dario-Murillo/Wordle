@@ -2,29 +2,19 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useActionState } from 'react';
 import { Eye, EyeOff, CircleX } from 'lucide-react';
+import usePasswordVisibility from '../../hooks/usePasswordVisibility';
 import loginAction from './actions';
 
 export default function LoginPage() {
-  const [isVisible, setIsVisible] = useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const error = searchParams.get('error');
+  const [isVisible, toggleVisibility] = usePasswordVisibility();
+  const [state, formAction] = useActionState(loginAction, { error: null });
 
-  const toggleVisibility = () => setIsVisible((prev) => !prev);
-
-  // Limpiar la URL del error despues de 10 segunods
-  useEffect(() => {
-    if (error) {
-      const timeout = setTimeout(() => {
-        router.replace('/login', { scroll: false });
-      }, 10000);
-      return () => clearTimeout(timeout);
-    }
-    return undefined;
-  }, [error, router]);
+  if (state.success) {
+    window.location.href = '/dashboard';
+    return null; // Prevent rendering the rest of the component
+  }
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -34,13 +24,13 @@ export default function LoginPage() {
             Iniciar Sesión
           </h1>
           <form
-            action={loginAction}
+            action={formAction}
             className="flex flex-col gap-4 w-full max-w-md"
           >
-            {error && (
+            {state.error && (
               <div className="flex flex-row items-center text-red-600 text-sm mt-1.5 bg-red-100 rounded-l-sm">
                 <CircleX className="w-5 h-5 m-2" />
-                <p>{error}</p>
+                <p>{state.error}</p>
               </div>
             )}{' '}
             <label
