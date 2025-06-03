@@ -5,6 +5,8 @@ import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
 import Tile from '../../components/Tile';
+import ToastMessage from '../../components/ToastMessage';
+import EndModal from '../../components/EndModal';
 import {
   formatGuess,
   addNewGuess,
@@ -156,7 +158,7 @@ test('formateo del intento retorna un array vacio si el intento es vacio', () =>
 test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   const turn = 0;
   const currentGuess = 'hello';
-  const solution = 'world';
+  const solution = 'hello';
 
   const formatted = [
     { key: 'h', color: 'gray' },
@@ -233,15 +235,8 @@ describe('handleKeyup', () => {
       { key: 'e', color: 'green' },
     ];
 
-    const mockSetCurrentGuess = vi.fn();
-    const mockSetGuesses = vi.fn();
-    const mockSetTurn = vi.fn();
     const mockSetIsCorrect = vi.fn();
-
-    const mockFormatGuess = vi.fn(() => formattedGuess);
-    const mockAddNewGuess = vi.fn();
-
-    const validWords = new Set(['table']);
+    mockFormatGuess = vi.fn(() => formattedGuess);
 
     handleKeyup({
       key: 'Enter',
@@ -400,11 +395,81 @@ test('tile no tiene la clase flip cuando no se le pasa bgColor', () => {
   expect(tile).not.toHaveClass('flip');
 });
 
-test('tile setea el retraso de animacion correctamente', () => {
+test('despliega mensaje de exito y solucion cuando se gana', () => {
+  render(<EndModal isCorrect solution="hello" modalVisible />);
+
+  expect(screen.getByText('¡Adivinaste!')).toBeInTheDocument();
+
+  expect(screen.getByText('La palabra era HELLO.')).toBeInTheDocument();
+});
+
+test('ToastMessage despliega el mensaje correcto', () => {
+  render(<ToastMessage message="🔥 ¡Increíble!" />);
+  expect(screen.getByText('🔥 ¡Increíble!')).toBeInTheDocument();
+});
+
+test('se aplican animaciones flip y jump cuando las condiciones son verdaderas', () => {
+  const bgColor = '#3A3A3C';
+  const borderColor = '#3A3A3C';
+  const flipDelay = 0.3;
+  const jumpDelay = 0.2;
+
   render(
-    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0.3} />,
+    <Tile
+      letter="A"
+      bgColor={bgColor}
+      borderColor={borderColor}
+      flipDelay={flipDelay}
+      shouldJump
+      jumpDelay={jumpDelay}
+    />,
   );
 
   const tile = screen.getByTestId('tile');
-  expect(tile.style.animationDelay).toBe('0.3s');
+  const animationStyle = tile.style.animation;
+
+  expect(animationStyle).toContain('flip');
+  expect(animationStyle).toContain('jump');
+  expect(animationStyle).toContain(`${flipDelay + jumpDelay}s`);
+});
+
+test('se setea isWinningRow correctamente', () => {
+  const guesses = [
+    [
+      { key: 'a', color: 'green' },
+      { key: 'b', color: 'green' },
+      { key: 'c', color: 'green' },
+      { key: 'd', color: 'green' },
+      { key: 'e', color: 'green' },
+    ],
+  ];
+
+  const currentGuess = '';
+  const turn = 1;
+  const isCorrect = true;
+
+  render(
+    <Grid
+      guesses={guesses}
+      currentGuess={currentGuess}
+      turn={turn}
+      isCorrect={isCorrect}
+    />,
+  );
+
+  const rows = screen.getAllByTestId('row');
+  expect(rows.length).toBe(guesses.length);
+
+  rows.forEach((row, index) => {
+    const tiles = row.querySelectorAll('[data-testid="tile"]');
+    const hasJumpClass = Array.from(tiles).some((tile) =>
+      tile.classList.contains('jump'),
+    );
+
+    if (index === turn - 1) {
+      expect(hasJumpClass).toBe(true);
+    } else {
+      expect(hasJumpClass).toBe(false);
+    }
+  });
 });

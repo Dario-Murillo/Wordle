@@ -24,8 +24,6 @@ export default function Tile({
     style.animation = `flip 0.6s ease-in-out forwards ${flipDelay}s, jump 0.4s ease ${flipDelay + jumpDelay}s`;
   } else if (shouldFlip) {
     style.animation = `flip 0.6s ease-in-out forwards ${flipDelay}s`;
-  } else if (shouldJump) {
-    style.animation = `jump 0.4s ease ${jumpDelay}s`;
   }
 
   return (

@@ -52,7 +52,6 @@ export default function Wordle({ secretWord }) {
     }
 
     if (turn > 5) {
-      console.log('unlucky, out of guesses');
       window.removeEventListener('keyup', handleKeyup);
     }
 
