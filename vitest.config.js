@@ -21,6 +21,10 @@ export default defineConfig({
         'src/**/*.spec.{js,jsx,ts,tsx}',
         '**/*.config.{js,mjs}',
         '**/coverage/**',
+        // ignore supabase setup files
+        'src/utils/supabase/**',
+        'src/middleware/**',
+        'src/app/auth/**',
       ],
     },
   },
