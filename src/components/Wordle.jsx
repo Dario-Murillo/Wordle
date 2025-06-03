@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import useWordle from '../hooks/useWordle';
 import Grid from './Grid';
 import EndModal from './EndModal';
+import ToastMessage from './ToastMessage';
 
 export default function Wordle({ secretWord }) {
   const { currentGuess, guesses, turn, isCorrect, handleKeyup } =
@@ -60,11 +61,7 @@ export default function Wordle({ secretWord }) {
 
   return (
     <div className="relative flex flex-col items-center">
-      {message && (
-        <div className="absolute top-2 sm:top-4 left-1/2 transform -translate-x-1/2 bg-[#538D4E] text-white px-3 py-1.5 rounded-md text-sm font-semibold shadow-sm whitespace-nowrap z-50 animate-fade">
-          {message}
-        </div>
-      )}
+      <ToastMessage message={message} />
       <div className="mt-16">
         <Grid
           guesses={guesses}
