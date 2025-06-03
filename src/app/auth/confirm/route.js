@@ -1,23 +1,26 @@
-import createClient from '@/utils/supabase/server';
+/* eslint-disable import/prefer-default-export */ // routes need to export a function named GET
+/* eslint-disable camelcase */ // token_has is a snake_case variable
 import { redirect } from 'next/navigation';
+import createClient from '../../../utils/supabase/server';
 
-export default async function GET(request) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const tokenHash = searchParams.get('token_hash');
+  const token_hash = searchParams.get('token_hash');
   const type = searchParams.get('type');
   const next = searchParams.get('next') ?? '/';
 
-  if (tokenHash && type) {
+  if (token_hash && type) {
     const supabase = await createClient();
 
     const { error } = await supabase.auth.verifyOtp({
       type,
-      tokenHash,
+      token_hash,
     });
     if (!error) {
       // redirect user to specified redirect URL or root of app
       redirect(next);
     }
+    console.error('Error confirming email:', error.message);
   }
 
   // redirect the user to an error page with some instructions
