@@ -198,7 +198,6 @@ test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   expect(mockSetCurrentGuess).toHaveBeenCalledWith('');
 });
 
-
 describe('handleKeyup', () => {
   let mockSetCurrentGuess;
   let mockSetGuesses;
@@ -222,55 +221,55 @@ describe('handleKeyup', () => {
     validWords = new Set(['table']);
   });
 
-test('se permite ingresar un intento válido con Enter', () => {
-  const solution = 'table';
-  const currentGuess = 'table';
+  test('se permite ingresar un intento válido con Enter', () => {
+    const solution = 'table';
+    const currentGuess = 'table';
 
-  const formattedGuess = [
-    { key: 't', color: 'green' },
-    { key: 'a', color: 'green' },
-    { key: 'b', color: 'green' },
-    { key: 'l', color: 'green' },
-    { key: 'e', color: 'green' },
-  ];
+    const formattedGuess = [
+      { key: 't', color: 'green' },
+      { key: 'a', color: 'green' },
+      { key: 'b', color: 'green' },
+      { key: 'l', color: 'green' },
+      { key: 'e', color: 'green' },
+    ];
 
-  const mockSetCurrentGuess = vi.fn();
-  const mockSetGuesses = vi.fn();
-  const mockSetTurn = vi.fn();
-  const mockSetIsCorrect = vi.fn();
+    const mockSetCurrentGuess = vi.fn();
+    const mockSetGuesses = vi.fn();
+    const mockSetTurn = vi.fn();
+    const mockSetIsCorrect = vi.fn();
 
-  const mockFormatGuess = vi.fn(() => formattedGuess);
-  const mockAddNewGuess = vi.fn();
+    const mockFormatGuess = vi.fn(() => formattedGuess);
+    const mockAddNewGuess = vi.fn();
 
-  const validWords = new Set(['table']);
+    const validWords = new Set(['table']);
 
-  handleKeyup({
-    key: 'Enter',
-    currentGuess,
-    turn: 2,
-    validWords,
-    setCurrentGuess: mockSetCurrentGuess,
-    setGuesses: mockSetGuesses,
-    setTurn: mockSetTurn,
-    setIsCorrect: mockSetIsCorrect,
-    solution,
-    addNewGuess: mockAddNewGuess,
-    formatGuess: mockFormatGuess,
+    handleKeyup({
+      key: 'Enter',
+      currentGuess,
+      turn: 2,
+      validWords,
+      setCurrentGuess: mockSetCurrentGuess,
+      setGuesses: mockSetGuesses,
+      setTurn: mockSetTurn,
+      setIsCorrect: mockSetIsCorrect,
+      solution,
+      addNewGuess: mockAddNewGuess,
+      formatGuess: mockFormatGuess,
+    });
+
+    expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
+
+    expect(mockAddNewGuess).toHaveBeenCalledWith({
+      turn: 2,
+      formattedGuess,
+      currentGuess,
+      solution,
+      setGuesses: mockSetGuesses,
+      setTurn: mockSetTurn,
+      setCurrentGuess: mockSetCurrentGuess,
+      setIsCorrect: mockSetIsCorrect,
+    });
   });
-
-  expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
-
-  expect(mockAddNewGuess).toHaveBeenCalledWith({
-    turn: 2,
-    formattedGuess,
-    currentGuess,
-    solution,
-    setGuesses: mockSetGuesses,
-    setTurn: mockSetTurn,
-    setCurrentGuess: mockSetCurrentGuess,
-    setIsCorrect: mockSetIsCorrect,
-  });
-});
 
   test('letras del intento actual se quitan con Backspace', () => {
     handleKeyup({

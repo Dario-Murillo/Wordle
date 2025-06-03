@@ -62,3 +62,42 @@ body {
 .pop {
   animation: pop 0.12s ease-in-out;
 }
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-35%);
+  }
+  60% {
+    transform: translateY(0);
+  }
+}
+
+.jump {
+  animation: jump 0.25s ease-out;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade {
+  animation: fade 2s ease-in-out forwards;
+}
