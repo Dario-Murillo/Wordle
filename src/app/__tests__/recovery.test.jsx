@@ -16,6 +16,24 @@ vi.mock('../../utils/supabase/server', () => {
 });
 
 describe('RecoveryPage', () => {
+  it('muestra un error si no se ingresan datos', async () => {
+    render(<RecoveryPage />);
+    const emailInput = screen.getByTestId('email-input');
+    const submitButton = screen.getByRole('button', {
+      name: /enviar enlace de recuperación/i,
+    });
+
+    fireEvent.change(emailInput, { target: { value: '' } });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    expect(
+      await screen.findByText(/Llena los campos obligatorios/i),
+    ).toBeInTheDocument();
+  });
+
   it('muestra un error si el correo es inválido', async () => {
     render(<RecoveryPage />);
     const emailInput = screen.getByTestId('email-input');
