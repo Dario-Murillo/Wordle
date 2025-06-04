@@ -6,6 +6,7 @@ const useWordle = (solution) => {
   const [currentGuess, setCurrentGuess] = useState('');
   const [guesses, setGuesses] = useState([...Array(6)]);
   const [validWords, setValidWords] = useState(new Set());
+  const [isCorrect, setIsCorrect] = useState(false);
 
   useEffect(() => {
     const loadWords = async () => {
@@ -25,6 +26,7 @@ const useWordle = (solution) => {
     turn,
     currentGuess,
     guesses,
+    isCorrect,
     handleKeyup: (event) =>
       handleKeyup({
         key: event.key,
@@ -33,6 +35,7 @@ const useWordle = (solution) => {
         validWords,
         setCurrentGuess,
         setGuesses,
+        setIsCorrect,
         setTurn,
         solution,
         addNewGuess,

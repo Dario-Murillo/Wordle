@@ -7,6 +7,8 @@ export default function Tile({
   borderColor,
   flipDelay = 0,
   shouldPop = false,
+  shouldJump = false,
+  jumpDelay = 0,
 }) {
   const shouldFlip = !!bgColor;
 
@@ -16,15 +18,22 @@ export default function Tile({
     backgroundColor: shouldFlip ? '#121213' : bgColor || 'transparent',
     borderColor: shouldFlip ? '#3A3A3C' : borderColor || '#3A3A3C',
     color: 'white',
-    animationDelay: `${flipDelay}s`,
   };
+
+  if (shouldFlip && shouldJump) {
+    style.animation = `flip 0.6s ease-in-out forwards ${flipDelay}s, jump 0.4s ease ${flipDelay + jumpDelay}s`;
+  } else if (shouldFlip) {
+    style.animation = `flip 0.6s ease-in-out forwards ${flipDelay}s`;
+  }
 
   return (
     <div
       data-testid="tile"
-      className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 ${
-        shouldFlip ? 'flip' : ''
-      } ${shouldPop ? 'pop' : ''}`}
+      className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 
+        ${shouldFlip ? 'flip' : ''} 
+        ${shouldPop ? 'pop' : ''} 
+       ${shouldJump ? 'jump' : ''}
+      `}
       style={style}
     >
       {letter}
@@ -38,6 +47,8 @@ Tile.propTypes = {
   borderColor: PropTypes.string,
   flipDelay: PropTypes.number,
   shouldPop: PropTypes.bool,
+  shouldJump: PropTypes.bool,
+  jumpDelay: PropTypes.number,
 };
 
 Tile.defaultProps = {
@@ -46,4 +57,6 @@ Tile.defaultProps = {
   borderColor: null,
   flipDelay: 0,
   shouldPop: false,
+  shouldJump: false,
+  jumpDelay: 0,
 };

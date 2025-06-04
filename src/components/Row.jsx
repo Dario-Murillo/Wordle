@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tile from './Tile';
 
-export default function Row({ guess, currentGuess }) {
+export default function Row({ guess, currentGuess, isWinningRow }) {
   if (Array.isArray(guess)) {
     const colorMap = {
       green: '#538D4E',
@@ -20,6 +20,8 @@ export default function Row({ guess, currentGuess }) {
             bgColor={colorMap[l.color]}
             borderColor={colorMap[l.color]}
             flipDelay={i * 0.2}
+            shouldJump={isWinningRow}
+            jumpDelay={0.8 + 0.6}
           />
         ))}
       </div>
@@ -68,6 +70,7 @@ Row.propTypes = {
     PropTypes.oneOf([null]),
   ]),
   currentGuess: PropTypes.string.isRequired,
+  isWinningRow: PropTypes.bool.isRequired,
 };
 
 Row.defaultProps = {

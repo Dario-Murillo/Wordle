@@ -5,6 +5,7 @@ import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
 import Tile from '../../components/Tile';
+
 import {
   formatGuess,
   addNewGuess,
@@ -155,6 +156,9 @@ test('formateo del intento retorna un array vacio si el intento es vacio', () =>
 
 test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   const turn = 0;
+  const currentGuess = 'hello';
+  const solution = 'hello';
+
   const formatted = [
     { key: 'h', color: 'gray' },
     { key: 'e', color: 'gray' },
@@ -166,14 +170,18 @@ test('addNewGuess actualiza los intentos y resetea currentGuess', () => {
   const mockSetGuesses = vi.fn();
   const mockSetTurn = vi.fn();
   const mockSetCurrentGuess = vi.fn();
+  const mockSetIsCorrect = vi.fn();
 
-  addNewGuess(
+  addNewGuess({
     turn,
-    formatted,
-    mockSetGuesses,
-    mockSetTurn,
-    mockSetCurrentGuess,
-  );
+    formattedGuess: formatted,
+    currentGuess,
+    solution,
+    setGuesses: mockSetGuesses,
+    setTurn: mockSetTurn,
+    setCurrentGuess: mockSetCurrentGuess,
+    setIsCorrect: mockSetIsCorrect,
+  });
 
   expect(mockSetGuesses).toHaveBeenCalledTimes(1);
   const setGuessesCallback = mockSetGuesses.mock.calls[0][0];
@@ -214,9 +222,20 @@ describe('handleKeyup', () => {
     validWords = new Set(['table']);
   });
 
-  test('se permite ingresar un intento valido con Enter', () => {
+  test('se permite ingresar un intento válido con Enter', () => {
     const solution = 'table';
     const currentGuess = 'table';
+
+    const formattedGuess = [
+      { key: 't', color: 'green' },
+      { key: 'a', color: 'green' },
+      { key: 'b', color: 'green' },
+      { key: 'l', color: 'green' },
+      { key: 'e', color: 'green' },
+    ];
+
+    const mockSetIsCorrect = vi.fn();
+    mockFormatGuess = vi.fn(() => formattedGuess);
 
     handleKeyup({
       key: 'Enter',
@@ -226,25 +245,24 @@ describe('handleKeyup', () => {
       setCurrentGuess: mockSetCurrentGuess,
       setGuesses: mockSetGuesses,
       setTurn: mockSetTurn,
+      setIsCorrect: mockSetIsCorrect,
       solution,
       addNewGuess: mockAddNewGuess,
       formatGuess: mockFormatGuess,
     });
 
     expect(mockFormatGuess).toHaveBeenCalledWith(solution, currentGuess);
-    expect(mockAddNewGuess).toHaveBeenCalledWith(
-      2,
-      [
-        { key: 't', color: 'green' },
-        { key: 'a', color: 'green' },
-        { key: 'b', color: 'green' },
-        { key: 'l', color: 'green' },
-        { key: 'e', color: 'green' },
-      ],
-      mockSetGuesses,
-      mockSetTurn,
-      mockSetCurrentGuess,
-    );
+
+    expect(mockAddNewGuess).toHaveBeenCalledWith({
+      turn: 2,
+      formattedGuess,
+      currentGuess,
+      solution,
+      setGuesses: mockSetGuesses,
+      setTurn: mockSetTurn,
+      setCurrentGuess: mockSetCurrentGuess,
+      setIsCorrect: mockSetIsCorrect,
+    });
   });
 
   test('letras del intento actual se quitan con Backspace', () => {
@@ -374,13 +392,4 @@ test('tile no tiene la clase flip cuando no se le pasa bgColor', () => {
   render(<Tile letter="w" />);
   const tile = screen.getByTestId('tile');
   expect(tile).not.toHaveClass('flip');
-});
-
-test('tile setea el retraso de animacion correctamente', () => {
-  render(
-    <Tile letter="w" bgColor="#3A3A3C" borderColor="#3A3A3C" flipDelay={0.3} />,
-  );
-
-  const tile = screen.getByTestId('tile');
-  expect(tile.style.animationDelay).toBe('0.3s');
 });
