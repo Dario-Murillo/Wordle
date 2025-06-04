@@ -25,8 +25,6 @@ export default function ResetPage() {
     }
   }, [token, type, router]);
 
-  if (!token || !type || type !== 'recovery') return null;
-
   useEffect(() => {
     if (state.success) {
       triggerToast(
