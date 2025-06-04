@@ -9,6 +9,16 @@ import EndModal from '../../components/EndModal';
 import useWordle from '../../hooks/useWordle';
 
 vi.mock('../../hooks/useWordle');
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+}));
 
 beforeEach(() => {
   vi.useFakeTimers();

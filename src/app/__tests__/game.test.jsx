@@ -5,12 +5,22 @@ import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
 import Tile from '../../components/Tile';
-
 import {
   formatGuess,
   addNewGuess,
   handleKeyup,
 } from '../../hooks/useWordleHelpers';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+}));
 
 beforeEach(() => {
   vi.restoreAllMocks();
