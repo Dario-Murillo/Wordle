@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import * as supabaseServer from '../../utils/supabase/server';
 import RecoveryPage from '../recovery/page';
 
 vi.mock('../../utils/supabase/server', () => {
