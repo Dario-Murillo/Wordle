@@ -1,23 +1,22 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import createClient from '../../utils/supabase/server';
 
-export default async function loginAction(formData) {
+export default async function loginAction(prevState, formData) {
   const supabase = await createClient();
 
   const email = formData.get('email')?.toString();
   const password = formData.get('password')?.toString();
 
   if (!email || !password) {
-    redirect('/login?error=Faltan datos');
+    return { error: 'Llena los campos obligatorios' };
   }
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    redirect('/login?error=Credenciales invalidas');
+    return { error: 'Error al iniciar sesión' };
   }
 
-  redirect('/dashboard');
+  return { success: true };
 }

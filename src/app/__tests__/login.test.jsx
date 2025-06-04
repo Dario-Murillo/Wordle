@@ -1,9 +1,7 @@
 import { expect, describe, it, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { redirect } from 'next/navigation';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import * as supabasServer from '../../utils/supabase/server';
 import LoginPage from '../login/page';
-import loginAction from '../login/actions';
 
 vi.mock('lucide-react', () => ({
   CircleX: () => <svg data-testid="error-icon" />,
@@ -37,13 +35,6 @@ vi.mock('next/navigation', () => {
   };
 });
 
-function makeFormData(email, password) {
-  const formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-  return formData;
-}
-
 describe('LoginPage', () => {
   it('se muesta el form de inicio de sesion', () => {
     render(<LoginPage />);
@@ -55,15 +46,6 @@ describe('LoginPage', () => {
     expect(
       screen.getByRole('button', { name: /Iniciar Sesión/i }),
     ).toBeInTheDocument();
-  });
-
-  it('deberia mostrar el mensaje de error si está presente en la URL', () => {
-    render(<LoginPage />);
-    const errorMessage = screen.getByText('Credenciales inválidas');
-    const errorIcon = screen.getByTestId('error-icon');
-
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorIcon).toBeInTheDocument();
   });
 
   it('deberia tener un link para registrarse', () => {
@@ -95,29 +77,75 @@ describe('LoginPage', () => {
     expect(passwordInput).toHaveAttribute('type', 'password');
   });
 
-  it('redirige con parametros de error si falta algun dato', async () => {
-    await loginAction(makeFormData('', '123456'));
-    expect(redirect).toHaveBeenCalledWith('/login?error=Faltan datos');
+  it('muestra mensaje de error si falta algun dato', async () => {
+    render(<LoginPage />);
+    const submitButton = screen.getByRole('button', {
+      name: /Iniciar Sesión/i,
+    });
 
-    await loginAction(makeFormData('test@mail.com', ''));
-    expect(redirect).toHaveBeenCalledWith('/login?error=Faltan datos');
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    expect(
+      screen.getAllByText(
+        /Llena los campos obligatorios|Llena todos los campos/i,
+      ),
+    ).toHaveLength(1);
   });
 
   it('redirige si supabase devuelve un error', async () => {
     (
       await supabasServer.default()
     ).auth.signInWithPassword.mockResolvedValueOnce({ error: true });
-    await loginAction(makeFormData('test@mail.com', '123456'));
-    expect(redirect).toHaveBeenCalledWith(
-      '/login?error=Credenciales invalidas',
-    );
+    render(<LoginPage />);
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const submitButton = screen.getByRole('button', {
+      name: /Iniciar Sesión/i,
+    });
+
+    fireEvent.change(emailInput, {
+      target: { value: 'correo-invalido@kdslf' },
+    });
+    fireEvent.change(passwordInput, { target: { value: 'Contraseña123' } });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    expect(screen.getByText('Error al iniciar sesión')).toBeInTheDocument();
   });
 
-  it('redirige al dashboard si se loguea correctaente', async () => {
+  it('redirige al dashboard si se loguea correctamente', async () => {
+    // Mock window.location
+    const originalLocation = window.location;
+    delete window.location;
+    window.location = { href: '' };
+
     (
       await supabasServer.default()
     ).auth.signInWithPassword.mockResolvedValueOnce({ error: false });
-    await loginAction(makeFormData('test@mail.com', '123456'));
-    expect(redirect).toHaveBeenCalledWith('/dashboard');
+
+    render(<LoginPage />);
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const submitButton = screen.getByRole('button', {
+      name: /Iniciar Sesión/i,
+    });
+
+    fireEvent.change(emailInput, {
+      target: { value: 'correo@valido.com' },
+    });
+    fireEvent.change(passwordInput, { target: { value: 'Contraseña123' } });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    expect(window.location.href).toBe('/dashboard');
+
+    // Restore original location
+    window.location = originalLocation;
   });
 });
