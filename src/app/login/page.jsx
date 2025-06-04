@@ -43,6 +43,7 @@ export default function LoginPage() {
             </label>
             <input
               id="email"
+              data-testid="email-input"
               name="email"
               type="email"
               placeholder="Ingresa tu correo electrónico..."

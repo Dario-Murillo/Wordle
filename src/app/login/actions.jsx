@@ -15,7 +15,7 @@ export default async function loginAction(prevState, formData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return { error: 'Error al iniciar' };
+    return { error: 'Error al iniciar sesión' };
   }
 
   return { success: true };
