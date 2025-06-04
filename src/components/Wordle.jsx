@@ -50,7 +50,7 @@ export default function Wordle({ secretWord }) {
       window.removeEventListener('keyup', handleKeyup);
     }
 
-    if (turn > 5) {
+    if (turn > 5 && !hasShownMessage) {
       setTimeout(() => {
         setMessage('⏳ ¡Te quedaste sin intentos!');
         setHasShownMessage(true);

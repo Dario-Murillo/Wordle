@@ -153,4 +153,33 @@ describe('endgame', () => {
       }
     });
   });
+
+  test('muestra mensaje de derrota y EndModal cuando se acaban los intentos', () => {
+    useWordle.mockReturnValue({
+      currentGuess: '',
+      guesses: Array(6).fill([]),
+      turn: 6,
+      isCorrect: false,
+      handleKeyup: vi.fn(),
+    });
+
+    render(<Wordle secretWord="words" />);
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    expect(
+      screen.getByText('⏳ ¡Te quedaste sin intentos!'),
+    ).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(
+      screen.queryByText('⏳ ¡Te quedaste sin intentos!'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('La palabra era WORDS.')).toBeInTheDocument();
+  });
 });
