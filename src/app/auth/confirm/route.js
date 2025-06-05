@@ -20,7 +20,7 @@ export async function GET(request) {
       // redirect user to specified redirect URL or root of app
       redirect(next);
     }
-    console.error('Error confirming email:', error.message);
+    console.error('Error: ', error.message);
   }
 
   // redirect the user to an error page with some instructions

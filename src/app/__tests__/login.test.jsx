@@ -1,6 +1,6 @@
 import { expect, describe, it, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import * as supabasServer from '../../utils/supabase/server';
+import * as supabaseServer from '../../utils/supabase/server';
 import LoginPage from '../login/page';
 
 vi.mock('lucide-react', () => ({
@@ -95,9 +95,9 @@ describe('LoginPage', () => {
   });
 
   it('redirige si supabase devuelve un error', async () => {
-    (
-      await supabasServer.default()
-    ).auth.signInWithPassword.mockResolvedValueOnce({ error: true });
+    await supabaseServer.signInWithPassword.mockResolvedValueOnce({
+      error: true,
+    });
     render(<LoginPage />);
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
@@ -123,9 +123,9 @@ describe('LoginPage', () => {
     delete window.location;
     window.location = { href: '' };
 
-    (
-      await supabasServer.default()
-    ).auth.signInWithPassword.mockResolvedValueOnce({ error: false });
+    await supabaseServer.signInWithPassword.mockResolvedValueOnce({
+      error: false,
+    });
 
     render(<LoginPage />);
     const emailInput = screen.getByTestId('email-input');
