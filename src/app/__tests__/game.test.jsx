@@ -300,6 +300,42 @@ describe('handleKeyup', () => {
     const callback = mockSetCurrentGuess.mock.calls[0][0];
     expect(callback('te')).toBe('tea');
   });
+
+  test('no se permite ingresar teclas que no son letras del alfabeto', () => {
+    mockSetCurrentGuess = vi.fn();
+    mockSetGuesses = vi.fn();
+    mockSetTurn = vi.fn();
+    mockAddNewGuess = vi.fn();
+    mockFormatGuess = vi.fn();
+
+    const nonLetterKeys = [
+      '1',
+      '!',
+      'ArrowLeft',
+      ' ',
+      'Tab',
+      '-',
+      '+',
+      'ç',
+      'ñ',
+    ];
+
+    nonLetterKeys.forEach((key) => {
+      handleKeyup({
+        key,
+        currentGuess: 'ab',
+        turn: 0,
+        validWords: new Set(['hello']),
+        setCurrentGuess: mockSetCurrentGuess,
+        setGuesses: mockSetGuesses,
+        setTurn: mockSetTurn,
+        addNewGuess: mockAddNewGuess,
+        formatGuess: mockFormatGuess,
+      });
+    });
+
+    expect(mockSetCurrentGuess).not.toHaveBeenCalled();
+  });
 });
 
 test('no se registra el intento si turn > 5', () => {
