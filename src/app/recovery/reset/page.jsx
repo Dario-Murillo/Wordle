@@ -3,7 +3,6 @@
 'use client';
 
 import { useEffect, useActionState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import registerAction from './actions';
 import usePasswordVisibility from '../../../hooks/usePasswordVisibility';
@@ -12,18 +11,8 @@ import useToast from '../../../hooks/useToast';
 
 export default function ResetPage() {
   const [isVisible, toggleVisibility] = usePasswordVisibility();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [state, formAction] = useActionState(registerAction, { error: null });
   const { show, message, triggerToast, closeToast } = useToast();
-  const token = searchParams.get('token_hash');
-  const type = searchParams.get('type');
-
-  useEffect(() => {
-    if (!token || !type || type !== 'recovery') {
-      router.replace('/recovery');
-    }
-  }, [token, type, router]);
 
   useEffect(() => {
     if (state.success) {
