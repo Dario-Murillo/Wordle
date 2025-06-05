@@ -12,7 +12,7 @@ export default function LogoutButton() {
     if (error) {
       console.error('Error al cerrar sesión:', error.message);
     } else {
-      router.replace('/login');
+      router.replace('/');
     }
   };
 
