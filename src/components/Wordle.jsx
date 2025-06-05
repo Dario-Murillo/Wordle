@@ -6,11 +6,30 @@ import EndModal from './EndModal';
 import ToastMessage from './ToastMessage';
 
 export default function Wordle({ secretWord }) {
-  const { currentGuess, guesses, turn, isCorrect, handleKeyup } =
-    useWordle(secretWord);
   const [showEndModal, setShowEndModal] = useState(false);
   const [message, setMessage] = useState('');
   const [hasShownMessage, setHasShownMessage] = useState(false);
+  const [shakeRow, setShakeRow] = useState(false);
+
+  const showInvalidToast = () => {
+    setShakeRow(true);
+    setMessage('⛔ Not in word list');
+
+    setTimeout(() => {
+      setShakeRow(false);
+    }, 500);
+
+    setTimeout(() => {
+      setMessage('');
+    }, 2000);
+  };
+
+  const { currentGuess, guesses, turn, isCorrect, handleKeyup } = useWordle(
+    secretWord,
+    {
+      onInvalidWord: showInvalidToast,
+    },
+  );
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);
@@ -75,6 +94,7 @@ export default function Wordle({ secretWord }) {
           currentGuess={currentGuess}
           turn={turn}
           isCorrect={isCorrect}
+          shouldShake={shakeRow} // ✅ pass shake prop
         />
       </div>
       <EndModal

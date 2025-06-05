@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tile from './Tile';
 
-export default function Row({ guess, currentGuess, isWinningRow }) {
+export default function Row({
+  guess,
+  currentGuess,
+  isWinningRow,
+  shouldShake,
+}) {
   if (Array.isArray(guess)) {
     const colorMap = {
       green: '#538D4E',
@@ -31,7 +36,10 @@ export default function Row({ guess, currentGuess, isWinningRow }) {
   if (currentGuess) {
     const letters = currentGuess.split('');
     return (
-      <div data-testid="row" className="flex justify-center gap-1 mb-2">
+      <div
+        data-testid="row"
+        className={`flex justify-center gap-1 mb-2 ${shouldShake ? 'shake' : ''}`}
+      >
         {letters.map((letter, i) => (
           <Tile
             /* eslint-disable-next-line react/no-array-index-key */
@@ -71,8 +79,10 @@ Row.propTypes = {
   ]),
   currentGuess: PropTypes.string.isRequired,
   isWinningRow: PropTypes.bool.isRequired,
+  shouldShake: PropTypes.bool,
 };
 
 Row.defaultProps = {
   guess: null,
+  shouldShake: false,
 };

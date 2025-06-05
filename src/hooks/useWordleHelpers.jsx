@@ -61,13 +61,14 @@ export const handleKeyup = ({
   solution,
   formatGuess: injectedFormatGuess = formatGuess,
   addNewGuess: injectedAddNewGuess = addNewGuess,
+  onInvalidWord,
 }) => {
   if (key === 'Enter') {
     if (turn > 5 || currentGuess.length !== 5) {
       return;
     }
     if (!validWords.has(currentGuess.toLowerCase())) {
-      console.error('Not a valid word!');
+      onInvalidWord?.();
       return;
     }
     const formattedGuess = injectedFormatGuess(solution, currentGuess);
