@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import * as supabaseServer from '../../utils/supabase/server';
-import ResetPage from '../recovery/reset/page';
+import ResetPage from '../../components/ResetForm';
 
 vi.mock('next/navigation', () => {
   const redirectMock = vi.fn();
