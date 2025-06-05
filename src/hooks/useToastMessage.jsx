@@ -11,7 +11,7 @@ export default function useToast() {
 
   const showInvalidToast = () => {
     setShakeRow(true);
-    setMessage('Not in word list');
+    setMessage('No está en la lista de palabras');
     setToastColor('#787C7E');
 
     setTimeout(() => setShakeRow(false), 500);
