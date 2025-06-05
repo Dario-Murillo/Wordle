@@ -9,6 +9,16 @@ import EndModal from '../../components/EndModal';
 import useWordle from '../../hooks/useWordle';
 
 vi.mock('../../hooks/useWordle');
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+}));
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -142,5 +152,34 @@ describe('endgame', () => {
         expect(hasJumpClass).toBe(false);
       }
     });
+  });
+
+  test('muestra mensaje de derrota y EndModal cuando se acaban los intentos', () => {
+    useWordle.mockReturnValue({
+      currentGuess: '',
+      guesses: Array(6).fill([]),
+      turn: 6,
+      isCorrect: false,
+      handleKeyup: vi.fn(),
+    });
+
+    render(<Wordle secretWord="words" />);
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    expect(
+      screen.getByText('⏳ ¡Te quedaste sin intentos!'),
+    ).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(
+      screen.queryByText('⏳ ¡Te quedaste sin intentos!'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('La palabra era WORDS.')).toBeInTheDocument();
   });
 });

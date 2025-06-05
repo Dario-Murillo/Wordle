@@ -14,10 +14,9 @@ export default function Wordle({ secretWord }) {
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);
+    const toastDelay = 1500;
 
     if (isCorrect && !hasShownMessage) {
-      const toastDelay = 1500;
-
       const getMessageByTurn = (winningTurn) => {
         switch (winningTurn) {
           case 1:
@@ -51,7 +50,16 @@ export default function Wordle({ secretWord }) {
       window.removeEventListener('keyup', handleKeyup);
     }
 
-    if (turn > 5) {
+    if (turn > 5 && !hasShownMessage) {
+      setTimeout(() => {
+        setMessage('⏳ ¡Te quedaste sin intentos!');
+        setHasShownMessage(true);
+
+        setTimeout(() => setMessage(''), 2000);
+      }, toastDelay);
+
+      setTimeout(() => setShowEndModal(true), toastDelay + 2000);
+
       window.removeEventListener('keyup', handleKeyup);
     }
 

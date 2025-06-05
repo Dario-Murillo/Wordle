@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/navigation';
 
 export default function EndModal({ isCorrect, solution, modalVisible }) {
+  const router = useRouter();
+
   return (
     <div
       className={`
@@ -18,28 +21,23 @@ export default function EndModal({ isCorrect, solution, modalVisible }) {
         `}
         style={{ transitionProperty: 'transform, opacity' }}
       >
-        {isCorrect ? (
-          <div>
-            <h1 className="text-4xl font-bold font-[family-name:var(--font-alfaslabone)] mb-8 tracking-wide leading-tight text-white">
-              ¡Adivinaste!
-            </h1>
-            <p className="text-xl text-[#D9D9D9] mb-4 font-[family-name:var(--font-karla)]">
-              La palabra era {solution.toUpperCase()}.
-            </p>
-          </div>
-        ) : (
-          <div />
-        )}
+        <h1 className="text-4xl font-bold font-[family-name:var(--font-alfaslabone)] mb-8 tracking-wide leading-tight text-white">
+          {isCorrect ? '¡Adivinaste!' : 'Perdiste'}
+        </h1>
+        <p className="text-xl text-[#D9D9D9] mb-4 font-[family-name:var(--font-karla)]">
+          La palabra era {solution.toUpperCase()}.
+        </p>
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center mt-6">
           <button
             type="button"
-            className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+            className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+            onClick={() => router.push('/')}
           >
             Salir
           </button>
           <button
             type="button"
-            className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+            className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
           >
             Jugar
           </button>
