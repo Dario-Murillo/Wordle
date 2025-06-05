@@ -9,11 +9,13 @@ export default function Wordle({ secretWord }) {
   const [showEndModal, setShowEndModal] = useState(false);
   const [message, setMessage] = useState('');
   const [hasShownMessage, setHasShownMessage] = useState(false);
+  const [toastColor, setToastColor] = useState('bg-[#787C7E]');
   const [shakeRow, setShakeRow] = useState(false);
 
   const showInvalidToast = () => {
     setShakeRow(true);
-    setMessage('⛔ Not in word list');
+    setMessage('Not in word list');
+    setToastColor('bg-[#787C7E]');
 
     setTimeout(() => {
       setShakeRow(false);
@@ -59,6 +61,7 @@ export default function Wordle({ secretWord }) {
 
       setTimeout(() => {
         setMessage(messageByTurn);
+        setToastColor('bg-[#538D4E]');
         setHasShownMessage(true);
 
         setTimeout(() => setMessage(''), 2000);
@@ -72,6 +75,7 @@ export default function Wordle({ secretWord }) {
     if (turn > 5 && !hasShownMessage) {
       setTimeout(() => {
         setMessage('⏳ ¡Te quedaste sin intentos!');
+        setToastColor('bg-[#787C7E]');
         setHasShownMessage(true);
 
         setTimeout(() => setMessage(''), 2000);
@@ -87,14 +91,14 @@ export default function Wordle({ secretWord }) {
 
   return (
     <div className="relative flex flex-col items-center">
-      <ToastMessage message={message} />
+      <ToastMessage message={message} bgColor={toastColor} />
       <div className="mt-16">
         <Grid
           guesses={guesses}
           currentGuess={currentGuess}
           turn={turn}
           isCorrect={isCorrect}
-          shouldShake={shakeRow} // ✅ pass shake prop
+          shouldShake={shakeRow}
         />
       </div>
       <EndModal
