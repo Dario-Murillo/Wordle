@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { formatGuess, addNewGuess, handleKeyup } from './useWordleHelpers';
 
-const useWordle = (solution) => {
+const useWordle = (solution, { onInvalidWord } = {}) => {
   const [turn, setTurn] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
   const [guesses, setGuesses] = useState([...Array(6)]);
@@ -40,6 +40,7 @@ const useWordle = (solution) => {
         solution,
         addNewGuess,
         formatGuess,
+        onInvalidWord,
       }),
   };
 };
