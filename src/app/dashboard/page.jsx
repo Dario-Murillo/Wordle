@@ -37,7 +37,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (state.success) {
-      triggerToast('Cambio de contraseña exitoso.', 'success');
+      triggerToast('Cambio de contraseña exitoso');
     }
     setError(state.error || null);
   }, [state, triggerToast]);
@@ -94,6 +94,7 @@ export default function DashboardPage() {
           >
             <X
               role="button"
+              data-testid="close-modal-button"
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-1xl cursor-pointer text-black"
             />
@@ -146,7 +147,7 @@ export default function DashboardPage() {
               </div>
 
               <label
-                data-testid="password-label"
+                data-testid="new-password-label"
                 htmlFor="password"
                 aria-label="contraseña"
                 className="text-sm text-gray-700 text-left"
@@ -155,7 +156,7 @@ export default function DashboardPage() {
               </label>
               <div className="relative">
                 <input
-                  data-testid="password-input"
+                  data-testid="new-password-input"
                   type={isVisible ? 'text' : 'password'}
                   id="new-password"
                   name="new-password"
