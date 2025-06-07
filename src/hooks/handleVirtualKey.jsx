@@ -1,4 +1,4 @@
-import { handleKeyup } from './useWordleHelpers';
+import handleKeyup from './helpers/handleKeyup';
 
 export default function handleVirtualKey(key, gameState, handlers) {
   // Create a fake event to pass to the original handler
