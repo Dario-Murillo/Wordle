@@ -7,6 +7,7 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
   const [guesses, setGuesses] = useState([...Array(6)]);
   const [validWords, setValidWords] = useState(new Set());
   const [isCorrect, setIsCorrect] = useState(false);
+  const [usedKeys, setUsedKeys] = useState({});
 
   useEffect(() => {
     const loadWords = async () => {
@@ -28,10 +29,12 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
     guesses,
     isCorrect,
     validWords,
+    usedKeys,
     setCurrentGuess,
     setGuesses,
     setTurn,
     setIsCorrect,
+    setUsedKeys,
     addNewGuess,
     formatGuess,
     handleKeyup: (event) =>
@@ -44,6 +47,7 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
         setGuesses,
         setIsCorrect,
         setTurn,
+        setUsedKeys,
         solution,
         addNewGuess,
         formatGuess,

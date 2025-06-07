@@ -27,9 +27,11 @@ export default function Wordle({ secretWord }) {
     turn,
     isCorrect,
     validWords,
+    usedKeys,
     setCurrentGuess,
     setGuesses,
     setTurn,
+    setUsedKeys,
     setIsCorrect,
     addNewGuess,
     formatGuess,
@@ -78,6 +80,7 @@ export default function Wordle({ secretWord }) {
         />
       </div>
       <Keyboard
+        usedKeys={usedKeys}
         onKeyPress={(key) =>
           handleVirtualKey(
             key,
@@ -91,6 +94,7 @@ export default function Wordle({ secretWord }) {
               setGuesses,
               setIsCorrect,
               setTurn,
+              setUsedKeys,
               solution: secretWord,
               addNewGuess,
               formatGuess,

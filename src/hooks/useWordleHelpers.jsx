@@ -34,6 +34,7 @@ export const addNewGuess = ({
   setTurn,
   setCurrentGuess,
   setIsCorrect,
+  setUsedKeys,
 }) => {
   if (currentGuess === solution) {
     setIsCorrect(true);
@@ -43,6 +44,23 @@ export const addNewGuess = ({
     newGuesses[turn] = formattedGuess;
     return newGuesses;
   });
+
+  setTimeout(() => {
+    setUsedKeys((prev) => {
+      const newKeys = { ...prev };
+      formattedGuess.forEach(({ key, color }) => {
+        const currentColor = newKeys[key];
+        if (
+          color === 'green' ||
+          (color === 'yellow' && currentColor !== 'green') ||
+          (color === 'gray' && !currentColor)
+        ) {
+          newKeys[key] = color;
+        }
+      });
+      return newKeys;
+    });
+  }, 1500);
 
   setTurn((prevTurn) => prevTurn + 1);
   setCurrentGuess('');
@@ -58,6 +76,7 @@ export const handleKeyup = ({
   setGuesses,
   setIsCorrect,
   setTurn,
+  setUsedKeys,
   solution,
   formatGuess: injectedFormatGuess = formatGuess,
   addNewGuess: injectedAddNewGuess = addNewGuess,
@@ -81,6 +100,7 @@ export const handleKeyup = ({
       setTurn,
       setCurrentGuess,
       setIsCorrect,
+      setUsedKeys,
     });
   }
 
