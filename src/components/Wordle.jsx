@@ -68,8 +68,10 @@ export default function Wordle({ secretWord }) {
   }, [handleKeyup, isCorrect, turn, hasShownMessage]);
 
   return (
-    <div className="relative flex flex-col items-center">
-      <ToastMessage message={message} bgColor={toastColor} />
+    <div className="flex flex-col justify-between h-full max-h-[calc(100vh-32px)] w-full">
+      <div className="relative w-full">
+        <ToastMessage message={message} bgColor={toastColor} />
+      </div>
       <div className="mt-16">
         <Grid
           guesses={guesses}
@@ -103,6 +105,7 @@ export default function Wordle({ secretWord }) {
           )
         }
       />
+      
       {showEndModal && (
         <EndModal
           isCorrect={isCorrect}

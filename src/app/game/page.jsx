@@ -47,7 +47,7 @@ export default function Game() {
   };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 bg-[#121213]">
+    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-[#121213] p-4 sm:p-6">
       {isDifficultyModalOpen && (
         <div className="fixed inset-0 bg-[#121213] flex items-center justify-center z-50">
           <div
@@ -63,14 +63,14 @@ export default function Game() {
               <button
                 type="button"
                 onClick={() => handleDifficultySelect('normal')}
-                className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+                className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
               >
                 Normal
               </button>
               <button
                 type="button"
                 onClick={() => handleDifficultySelect('hard')}
-                className="rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+                className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
               >
                 Difícil
               </button>
@@ -79,7 +79,7 @@ export default function Game() {
         </div>
       )}
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+      <main className="w-full max-w-xl">
         {secretWord && <Wordle secretWord={secretWord} />}
       </main>
     </div>

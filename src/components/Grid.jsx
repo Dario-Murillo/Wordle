@@ -10,7 +10,7 @@ export default function Grid({
   shouldShake,
 }) {
   return (
-    <div>
+    <div className="w-full max-w-[340px] sm:max-w-[400px] mx-auto">
       {guesses.map((g, i) => {
         const isWinningRow = isCorrect && i === turn - 1;
         if (turn === i) {
