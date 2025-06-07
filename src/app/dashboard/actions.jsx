@@ -9,10 +9,11 @@ function validatePassword(password) {
 export default async function changePassword(prevState, formData) {
   const supabase = await createClient();
 
-  const password = formData.get('password')?.toString();
-  const confirmation = formData.get('confirmation')?.toString();
+  const oldPassword = formData.get('old-password')?.toString();
+  const password = formData.get('new-password')?.toString();
+  const confirmation = formData.get('confirmation-password')?.toString();
 
-  if (!password || !confirmation) {
+  if (!oldPassword || !password || !confirmation) {
     return { error: 'Llena los campos obligatorios' };
   }
 
@@ -24,7 +25,26 @@ export default async function changePassword(prevState, formData) {
   }
 
   if (password !== confirmation) {
-    return { error: 'Las contraseñas no coinciden' };
+    return {
+      error: 'Las contraseñas no coinciden',
+    };
+  }
+
+  // Obtener el usuario actual
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Reautenticar usando el email y la contraseña antigua
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: oldPassword,
+  });
+
+  if (signInError) {
+    return {
+      error: 'La contraseña actual es incorrecta',
+    };
   }
 
   const { error } = await supabase.auth.updateUser({ password });
@@ -32,6 +52,7 @@ export default async function changePassword(prevState, formData) {
   if (error) {
     return {
       error: 'Error al restablecer la contraseña. Intentalo de nuevo',
+      field: 'new-password',
     };
   }
 
