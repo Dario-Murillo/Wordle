@@ -28,14 +28,17 @@ vi.mock('../../hooks/useModalVisibility', () => ({
   ],
 }));
 
+// Asegúrate de limpiar el mock antes del test
+const toggleMock = vi.fn();
+// Sobrescribe el mock de usePasswordVisibility solo para este test
+vi.mock('../../hooks/usePasswordVisibility', () => ({
+  __esModule: true,
+  default: () => [false, toggleMock],
+}));
+
 vi.mock('../../hooks/useAuth', () => ({
   __esModule: true,
   default: () => ({ email: 'test@correo.com' }),
-}));
-
-vi.mock('../../hooks/usePasswordVisibility', () => ({
-  __esModule: true,
-  default: () => [false, vi.fn()],
 }));
 
 const triggerToast = vi.fn();
@@ -88,6 +91,7 @@ vi.mock('next/navigation', () => {
 });
 
 beforeEach(() => {
+  toggleMock.mockClear();
   modalVisible = false;
   shouldRenderModal = false;
   openModalBase.mockClear();
@@ -396,5 +400,27 @@ describe('Password change', () => {
     });
 
     expect(triggerToast).toHaveBeenCalledWith('Cambio de contraseña exitoso');
+  });
+
+  it('llama a toggleVisibility cuando se hace click en el botón de mostrar/ocultar contraseña', async () => {
+    render(<DashboardPage />);
+    const changePasswordButton = screen.getByRole('button', {
+      name: /Cambiar contraseña/i,
+    });
+
+    await act(async () => {
+      fireEvent.click(changePasswordButton);
+    });
+
+    modalVisible = true;
+    shouldRenderModal = true;
+    render(<DashboardPage />);
+
+    const toggleButton = screen.getAllByTestId('toggle-button')[0];
+    await act(async () => {
+      fireEvent.click(toggleButton);
+    });
+
+    expect(toggleMock).toHaveBeenCalled();
   });
 });
