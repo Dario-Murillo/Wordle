@@ -80,7 +80,6 @@ export default function Game() {
       )}
 
       <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
-        <div>secret word - {secretWord}</div>
         {secretWord && <Wordle secretWord={secretWord} />}
       </main>
     </div>

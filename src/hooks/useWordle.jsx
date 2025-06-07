@@ -27,6 +27,13 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
     currentGuess,
     guesses,
     isCorrect,
+    validWords,
+    setCurrentGuess,
+    setGuesses,
+    setTurn,
+    setIsCorrect,
+    addNewGuess,
+    formatGuess,
     handleKeyup: (event) =>
       handleKeyup({
         key: event.key,
