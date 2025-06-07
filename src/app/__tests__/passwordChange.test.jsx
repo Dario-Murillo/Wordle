@@ -66,16 +66,16 @@ vi.mock('../../utils/supabase/server', () => {
       data: { user: { email: 'test@correo.com' } },
     }),
   );
-  const signUp = vi.fn(() => ({ error: null }));
+  const signInWithPassword = vi.fn(() => ({ error: null }));
   const updateUser = vi.fn(() => ({ error: null }));
   const createClient = vi.fn(() => ({
-    auth: { getUser, signUp, updateUser },
+    auth: { getUser, signInWithPassword, updateUser },
   }));
   return {
     default: createClient,
     __esModule: true,
     getUser,
-    signUp,
+    signInWithPassword,
     updateUser,
     createClient,
   };
@@ -283,7 +283,7 @@ describe('Password change', () => {
   });
 
   it('muestra un mensaje de error si la contraseña actual es incorrecta', async () => {
-    await supabaseServer.signUp.mockImplementationOnce(() => ({
+    await supabaseServer.signInWithPassword.mockImplementationOnce(() => ({
       error: { message: 'Error en Supabase' },
     }));
 
