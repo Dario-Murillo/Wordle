@@ -29,7 +29,7 @@ export default function Tile({
   return (
     <div
       data-testid="tile"
-      className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase mx-0.5 border-2 
+      className={`w-[48px] h-[48px] sm:w-[62px] sm:h-[62px] flex items-center justify-center text-2xl sm:text-3xl font-bold uppercase border-2 
         ${shouldFlip ? 'flip' : ''} 
         ${shouldPop ? 'pop' : ''} 
        ${shouldJump ? 'jump' : ''}

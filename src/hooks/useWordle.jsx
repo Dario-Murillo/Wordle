@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { formatGuess, addNewGuess, handleKeyup } from './useWordleHelpers';
+import formatGuess from './helpers/formatGuess';
+import addNewGuess from './helpers/addNewGuess';
+import handleKeyup from './helpers/handleKeyup';
 
 const useWordle = (solution, { onInvalidWord } = {}) => {
   const [turn, setTurn] = useState(0);
@@ -7,6 +9,7 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
   const [guesses, setGuesses] = useState([...Array(6)]);
   const [validWords, setValidWords] = useState(new Set());
   const [isCorrect, setIsCorrect] = useState(false);
+  const [usedKeys, setUsedKeys] = useState({});
 
   useEffect(() => {
     const loadWords = async () => {
@@ -27,6 +30,15 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
     currentGuess,
     guesses,
     isCorrect,
+    validWords,
+    usedKeys,
+    setCurrentGuess,
+    setGuesses,
+    setTurn,
+    setIsCorrect,
+    setUsedKeys,
+    addNewGuess,
+    formatGuess,
     handleKeyup: (event) =>
       handleKeyup({
         key: event.key,
@@ -37,6 +49,7 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
         setGuesses,
         setIsCorrect,
         setTurn,
+        setUsedKeys,
         solution,
         addNewGuess,
         formatGuess,

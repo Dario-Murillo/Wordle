@@ -16,7 +16,7 @@ export default function Row({
     };
 
     return (
-      <div data-testid="row" className="flex justify-center gap-1 mb-2">
+      <div data-testid="row" className="flex justify-center gap-[5px] mb-[5px]">
         {guess.map((l, i) => (
           <Tile
             /* eslint-disable-next-line react/no-array-index-key */
@@ -38,7 +38,7 @@ export default function Row({
     return (
       <div
         data-testid="row"
-        className={`flex justify-center gap-1 mb-2 ${shouldShake ? 'shake' : ''}`}
+        className={`flex justify-center gap-[5px] mb-[5px] ${shouldShake ? 'shake' : ''}`}
       >
         {letters.map((letter, i) => (
           <Tile
@@ -58,7 +58,7 @@ export default function Row({
   }
 
   return (
-    <div data-testid="row" className="flex justify-center gap-1 mb-2">
+    <div data-testid="row" className="flex justify-center gap-[5px] mb-[5px]">
       {[...Array(5)].map((_, i) => (
         /* eslint-disable-next-line react/no-array-index-key */
         <Tile key={`${_}-${i}`} />
