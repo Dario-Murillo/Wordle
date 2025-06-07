@@ -8,7 +8,7 @@ export default function ToastMessage({ message, bgColor }) {
   return (
     <div
       data-testid="toast"
-      className="absolute top-2 sm:top-4 left-1/2 transform -translate-x-1/2 text-white px-3 py-1.5 rounded-md text-sm font-semibold shadow-sm whitespace-nowrap z-50 fade"
+      className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-[10px] text-white px-3 py-1.5 rounded-md text-sm font-semibold shadow-sm whitespace-nowrap z-50 bg-[#787C7E] fade"
       style={style}
     >
       {message}

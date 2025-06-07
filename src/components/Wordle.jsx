@@ -5,6 +5,8 @@ import useToast from '../hooks/useToastMessage';
 import Grid from './Grid';
 import EndModal from './EndModal';
 import ToastMessage from './ToastMessage';
+import Keyboard from './Keyboard';
+import handleVirtualKey from '../hooks/handleVirtualKey';
 
 export default function Wordle({ secretWord }) {
   const [showEndModal, setShowEndModal] = useState(false);
@@ -19,12 +21,24 @@ export default function Wordle({ secretWord }) {
     showLoseToast,
   } = useToast();
 
-  const { currentGuess, guesses, turn, isCorrect, handleKeyup } = useWordle(
-    secretWord,
-    {
-      onInvalidWord: showInvalidToast,
-    },
-  );
+  const {
+    currentGuess,
+    guesses,
+    turn,
+    isCorrect,
+    validWords,
+    usedKeys,
+    setCurrentGuess,
+    setGuesses,
+    setTurn,
+    setUsedKeys,
+    setIsCorrect,
+    addNewGuess,
+    formatGuess,
+    handleKeyup,
+  } = useWordle(secretWord, {
+    onInvalidWord: showInvalidToast,
+  });
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);
@@ -54,8 +68,10 @@ export default function Wordle({ secretWord }) {
   }, [handleKeyup, isCorrect, turn, hasShownMessage]);
 
   return (
-    <div className="relative flex flex-col items-center">
-      <ToastMessage message={message} bgColor={toastColor} />
+    <div className="flex flex-col justify-between h-full max-h-[calc(100vh-32px)] w-full">
+      <div className="relative w-full">
+        <ToastMessage message={message} bgColor={toastColor} />
+      </div>
       <div className="mt-16">
         <Grid
           guesses={guesses}
@@ -65,12 +81,39 @@ export default function Wordle({ secretWord }) {
           shouldShake={shakeRow}
         />
       </div>
-      <EndModal
-        isCorrect={isCorrect}
-        turn={turn}
-        solution={secretWord}
-        modalVisible={showEndModal}
+      <Keyboard
+        usedKeys={usedKeys}
+        onKeyPress={(key) =>
+          handleVirtualKey(
+            key,
+            {
+              currentGuess,
+              turn,
+              validWords,
+            },
+            {
+              setCurrentGuess,
+              setGuesses,
+              setIsCorrect,
+              setTurn,
+              setUsedKeys,
+              solution: secretWord,
+              addNewGuess,
+              formatGuess,
+              onInvalidWord: showInvalidToast,
+            },
+          )
+        }
       />
+
+      {showEndModal && (
+        <EndModal
+          isCorrect={isCorrect}
+          turn={turn}
+          solution={secretWord}
+          modalVisible={showEndModal}
+        />
+      )}
     </div>
   );
 }
