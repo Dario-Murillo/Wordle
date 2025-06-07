@@ -105,7 +105,7 @@ export default function Wordle({ secretWord }) {
           )
         }
       />
-      
+
       {showEndModal && (
         <EndModal
           isCorrect={isCorrect}
