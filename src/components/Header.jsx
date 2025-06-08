@@ -36,13 +36,17 @@ export default function Header() {
         className="cursor-pointer mr-4 px-4 py-2 rounded text-white font-bold"
       >
         {user !== null ? (
-          <CircleUserRound style={{ width: 36, height: 36 }} />
+          <CircleUserRound
+            data-testid="user-icon"
+            style={{ width: 36, height: 36 }}
+          />
         ) : (
           'Iniciar sesión'
         )}
       </button>
       <CircleHelp
         type="button"
+        data-testid="help-icon"
         aria-label="Mostrar reglas"
         onClick={handleOpenModal}
         className="cursor-pointer text-white text-2xl mr-10"
