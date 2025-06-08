@@ -42,6 +42,10 @@ export default function EndModal({ isCorrect, solution, modalVisible }) {
           <button
             type="button"
             className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
           >
             Jugar
           </button>
