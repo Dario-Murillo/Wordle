@@ -40,6 +40,7 @@ export default function DashboardPage() {
       triggerToast('Cambio de contraseña exitoso');
     }
     setError(state.error || null);
+    closeModalBase();
   }, [state, triggerToast]);
 
   if (!user) return null;
