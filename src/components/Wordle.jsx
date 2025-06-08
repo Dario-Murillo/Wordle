@@ -36,6 +36,7 @@ export default function Wordle({ secretWord }) {
     addNewGuess,
     formatGuess,
     handleKeyup,
+    hardMode,
   } = useWordle(secretWord, {
     onInvalidWord: showInvalidToast,
   });
@@ -101,6 +102,8 @@ export default function Wordle({ secretWord }) {
               addNewGuess,
               formatGuess,
               onInvalidWord: showInvalidToast,
+              hardMode,
+              guesses,
             },
           )
         }

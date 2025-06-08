@@ -1,5 +1,6 @@
 import formatGuess from './formatGuess';
 import addNewGuess from './addNewGuess';
+import validateHardModeGuess from './validateHardModeGuess';
 
 // Helper function to handle the keyup event
 export default function handleKeyup({
@@ -16,6 +17,8 @@ export default function handleKeyup({
   formatGuess: injectedFormatGuess = formatGuess,
   addNewGuess: injectedAddNewGuess = addNewGuess,
   onInvalidWord,
+  hardMode,
+  guesses,
 }) {
   if (key === 'Enter') {
     if (turn > 5 || currentGuess.length !== 5) {
@@ -24,6 +27,14 @@ export default function handleKeyup({
     if (!validWords.has(currentGuess.toLowerCase())) {
       onInvalidWord?.();
       return;
+    }
+    // Hard mode validation
+    if (hardMode) {
+      const error = validateHardModeGuess(guesses, currentGuess);
+      if (error) {
+        onInvalidWord?.(error);
+        return;
+      }
     }
     const formattedGuess = injectedFormatGuess(solution, currentGuess);
     injectedAddNewGuess({

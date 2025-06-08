@@ -9,9 +9,11 @@ export default function useToast() {
     setTimeout(() => setMessage(''), ms);
   };
 
-  const showInvalidToast = () => {
+  const showInvalidToast = (
+    customMessage = 'No está en la lista de palabras',
+  ) => {
     setShakeRow(true);
-    setMessage('No está en la lista de palabras');
+    setMessage(customMessage);
     setToastColor('#787C7E');
 
     setTimeout(() => setShakeRow(false), 500);

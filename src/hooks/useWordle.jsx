@@ -10,6 +10,9 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
   const [validWords, setValidWords] = useState(new Set());
   const [isCorrect, setIsCorrect] = useState(false);
   const [usedKeys, setUsedKeys] = useState({});
+  const [hardMode, setHardMode] = useState(() => {
+    return localStorage.getItem('difficulty') === 'hard';
+  });
 
   useEffect(() => {
     const loadWords = async () => {
@@ -39,6 +42,8 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
     setUsedKeys,
     addNewGuess,
     formatGuess,
+    hardMode,
+    setHardMode,
     handleKeyup: (event) =>
       handleKeyup({
         key: event.key,
@@ -54,6 +59,8 @@ const useWordle = (solution, { onInvalidWord } = {}) => {
         addNewGuess,
         formatGuess,
         onInvalidWord,
+        hardMode,
+        guesses,
       }),
   };
 };
