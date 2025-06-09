@@ -54,7 +54,7 @@ export default function Wordle({ secretWord }) {
       window.removeEventListener('keyup', handleKeyup);
     }
 
-    if (turn > 5 && !hasShownMessage) {
+    if (turn > 5 && !isCorrect && !hasShownMessage) {
       setTimeout(() => {
         showLoseToast();
         setHasShownMessage(true);
