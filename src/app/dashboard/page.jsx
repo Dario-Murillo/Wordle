@@ -57,7 +57,7 @@ export default function DashboardPage() {
         </h1>
         <div className="flex flex-row gap-2 items-center text-4xl">
           <CircleUserRound className="w-15 h-15 text-white" />
-          <p>{user.email}</p>
+          <p className="text-3xl">{user.email}</p>
         </div>
         <div className="flex flex-row gap-2 items-center text-1xl mt-5">
           {/* El logout debe ser manejado en el cliente */}
@@ -93,6 +93,7 @@ export default function DashboardPage() {
           `}
           >
             <X
+              type="button"
               role="button"
               data-testid="close-modal-button"
               onClick={handleCloseModal}
