@@ -28,6 +28,27 @@ vi.mock('../../hooks/useModalVisibility', () => ({
   ],
 }));
 
+vi.mock('../../utils/supabase/client', () => ({
+  __esModule: true,
+  default: () => ({
+    from: () => ({
+      select: vi.fn().mockResolvedValue({
+        data: [
+          {
+            id: 1,
+            user_id: 'user-123',
+            palabra: 'Piano',
+            adivinada: true,
+            intentos: 2,
+            fecha: '2025-06-08T23:26:36.128176+00:00',
+          },
+        ],
+        error: null,
+      }),
+    }),
+  }),
+}));
+
 // Asegúrate de limpiar el mock antes del test
 const toggleMock = vi.fn();
 // Sobrescribe el mock de usePasswordVisibility solo para este test
