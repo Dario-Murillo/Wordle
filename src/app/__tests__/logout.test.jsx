@@ -66,12 +66,14 @@ beforeEach(() => {
 });
 
 describe('Logout Button', () => {
-  it('se muesta el boton', () => {
+  it('se muesta el boton', async () => {
     render(<DashboardPage />);
 
-    expect(
-      screen.getByRole('button', { name: /Cerrar sesión/i }),
-    ).toBeInTheDocument();
+    await act(async () => {
+      expect(
+        screen.getByRole('button', { name: /Cerrar sesión/i }),
+      ).toBeInTheDocument();
+    });
   });
 
   it('redirige al dashboard si se loguea correctamente', async () => {

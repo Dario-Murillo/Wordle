@@ -120,11 +120,13 @@ beforeEach(() => {
 });
 
 describe('Password change', () => {
-  it('se muestra el botón', () => {
+  it('se muestra el botón', async () => {
     render(<DashboardPage />);
-    expect(
-      screen.getByRole('button', { name: /Cambiar contraseña/i }),
-    ).toBeInTheDocument();
+    await act(async () => {
+      expect(
+        screen.getByRole('button', { name: /Cambiar contraseña/i }),
+      ).toBeInTheDocument();
+    });
   });
 
   it('abre el modal si se clickea el botón', async () => {
@@ -145,16 +147,18 @@ describe('Password change', () => {
     // Vuelve a renderizar para reflejar el nuevo estado
     render(<DashboardPage />);
 
-    expect(screen.getByTestId(/old-password-label/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/old-password-input/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/new-password-label/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/new-password-input/i)).toBeInTheDocument();
-    expect(
-      screen.getByTestId(/confirmation-password-label/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId(/confirmation-password-input/i),
-    ).toBeInTheDocument();
+    await act(async () => {
+      expect(screen.getByTestId(/old-password-label/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/old-password-input/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/new-password-label/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/new-password-input/i)).toBeInTheDocument();
+      expect(
+        screen.getByTestId(/confirmation-password-label/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId(/confirmation-password-input/i),
+      ).toBeInTheDocument();
+    });
   });
 
   it('cierra el modal si se clickea el botón', async () => {
@@ -192,8 +196,11 @@ describe('Password change', () => {
     const buttons = screen.getAllByRole('button', {
       name: /Cambiar contraseña/i,
     });
-    expect(buttons).toHaveLength(1);
-    expect(buttons[0]).toBeInTheDocument();
+
+    await act(async () => {
+      expect(buttons).toHaveLength(1);
+      expect(buttons[0]).toBeInTheDocument();
+    });
   });
 
   it('muestra mensajes de error en todos los campos si no se ingresan datos', async () => {
