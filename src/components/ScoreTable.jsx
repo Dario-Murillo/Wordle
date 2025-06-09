@@ -15,13 +15,6 @@ import {
 } from './TableComponents';
 import createClient from '../utils/supabase/client';
 
-// const dummyData = Array.from({ length: 200 }, (_, i) => ({
-//   palabra: 'Piano',
-//   adivinada: 'Sí',
-//   intentos: 3,
-//   fecha: '2025-06-11',
-// }));
-
 const ITEMS_PER_PAGE = 10;
 
 export default function ScoreTable({ user }) {
