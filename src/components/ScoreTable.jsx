@@ -77,7 +77,7 @@ export default function ScoreTable({ user }) {
             {paginatedData.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.palabra}</TableCell>
-                <TableCell>{item.adivinada ? 'Si' : 'No'}</TableCell>
+                <TableCell>{item.adivinada ? 'Sí' : 'No'}</TableCell>
                 <TableCell>{item.intentos}</TableCell>
                 <TableCell>{item.fecha}</TableCell>
               </TableRow>
