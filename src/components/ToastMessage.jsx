@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function ToastMessage({ message, bgColor }) {
+export default function ToastMessage({ message, bgColor, textColor }) {
   if (!message) return null;
-  const style = bgColor ? { backgroundColor: bgColor } : undefined;
+  const style = {
+    backgroundColor: bgColor || '#787C7E',
+    color: textColor || '#FFFFFF',
+  };
 
   return (
     <div
@@ -19,8 +22,10 @@ export default function ToastMessage({ message, bgColor }) {
 ToastMessage.propTypes = {
   message: PropTypes.string.isRequired,
   bgColor: PropTypes.string,
+  textColor: PropTypes.string,
 };
 
 ToastMessage.defaultProps = {
   bgColor: '#787C7E',
+  textColor: '#FFFFFF',
 };
