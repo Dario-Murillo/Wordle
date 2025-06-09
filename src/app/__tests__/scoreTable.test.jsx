@@ -57,7 +57,7 @@ describe('Score Table', () => {
   it('muestra la información obtenida del from', async () => {
     render(<ScoreTable user={user} />);
     expect(await screen.findByText('PIANO')).toBeInTheDocument();
-    expect(screen.getByText('Si')).toBeInTheDocument();
+    expect(screen.getByText('Sí')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('2025-06-08')).toBeInTheDocument();
   });
