@@ -2,23 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import createClient from '../utils/supabase/client'; // Usa el cliente del lado cliente
+import createClient from '../utils/supabase/client';
 
-export default function useAuth() {
+export default function useAuth(redirectIfNoUser = true) {
   const [user, setUser] = useState(null);
-
   const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       if (!data?.user) {
-        router.replace('/login');
+        if (redirectIfNoUser) {
+          router.replace('/login');
+        }
+        setUser(null);
       } else {
         setUser(data.user);
       }
     });
-  }, [router]);
+  }, [router, redirectIfNoUser]);
 
   return user;
 }
