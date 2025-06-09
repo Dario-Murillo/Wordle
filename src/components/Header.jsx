@@ -110,9 +110,9 @@ export default function Header() {
                   flipDelay={0.8}
                 />
               </div>
-              <p>La P está en la palabra y en el lugar correcto</p>
-              <p>La I está en la palabra, pero en el lugar equivocado </p>
-              <p>El resto de letras no estan en la palabra </p>
+              <p>La P está en la palabra y en el lugar correcto. </p>
+              <p>La I está en la palabra, pero en el lugar equivocado. </p>
+              <p>El resto de letras no estan en la palabra. </p>
               <p className="font-bold mt-4">
                 ¿Cómo funciona la dificultad difícil?
               </p>
