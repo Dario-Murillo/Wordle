@@ -3,6 +3,7 @@ import { useState } from 'react';
 export default function useToast() {
   const [message, setMessage] = useState('');
   const [toastColor, setToastColor] = useState('#787C7E');
+  const [toastTextColor, setToastTextColor] = useState('#FFFFFF');
   const [shakeRow, setShakeRow] = useState(false);
 
   const hideMessageAfter = (ms) => {
@@ -14,7 +15,8 @@ export default function useToast() {
   ) => {
     setShakeRow(true);
     setMessage(customMessage);
-    setToastColor('#787C7E');
+    setToastColor('#FFFFFF');
+    setToastTextColor('#000000');
 
     setTimeout(() => setShakeRow(false), 500);
     hideMessageAfter(2000);
@@ -23,6 +25,7 @@ export default function useToast() {
   const showLoseToast = () => {
     setMessage('⏳ ¡Te quedaste sin intentos!');
     setToastColor('#787C7E');
+    setToastTextColor('#FFFFFF');
     hideMessageAfter(2000);
   };
 
@@ -48,12 +51,14 @@ export default function useToast() {
 
     setMessage(getMessageByTurn(turn));
     setToastColor('#538D4E');
+    setToastTextColor('#FFFFFF');
     hideMessageAfter(2000);
   };
 
   return {
     message,
     toastColor,
+    toastTextColor,
     shakeRow,
     showInvalidToast,
     showLoseToast,

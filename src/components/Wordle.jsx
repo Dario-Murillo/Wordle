@@ -15,6 +15,7 @@ export default function Wordle({ secretWord }) {
   const {
     message,
     toastColor,
+    toastTextColor,
     shakeRow,
     showInvalidToast,
     showWinToast,
@@ -71,7 +72,11 @@ export default function Wordle({ secretWord }) {
   return (
     <div className="flex flex-col justify-between h-full max-h-[calc(100vh-32px)] w-full">
       <div className="relative w-full">
-        <ToastMessage message={message} bgColor={toastColor} />
+        <ToastMessage
+          message={message}
+          bgColor={toastColor}
+          textColor={toastTextColor}
+        />
       </div>
       <div className="mt-16">
         <Grid
