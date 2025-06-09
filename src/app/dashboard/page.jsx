@@ -4,7 +4,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useActionState, useState } from 'react';
-import { CircleUserRound, X, Eye, EyeOff } from 'lucide-react';
+import { CircleUserRound, X, Eye, EyeOff, MoveLeft } from 'lucide-react';
 import Toast from '../../components/Toast';
 import ScoreTable from '../../components/ScoreTable';
 import useAuth from '../../hooks/useAuth';
@@ -51,15 +51,27 @@ export default function DashboardPage() {
     setError(result?.error || null);
   };
 
+  const handleLeft = async () => {
+    window.location.href = '/game';
+  };
+
   return (
     <div className="grid grid-cols-7 grid-rows-5 gap-16 min-h-screen p-8 pb-20 sm:p-20-grid-cols-1 font-[family-name:var(--font-karla)] bg-[#121213]">
       <div className="col-span-5 row-span-4 col-start-2 row-start-1 mt-10">
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-5 font-[family-name:var(--font-alfaslabone)]">
-          Dashboard
-        </h1>
+        <div className="flex flex-row">
+          <MoveLeft
+            type="button"
+            role="button"
+            onClick={handleLeft}
+            className="cursor-pointer flex w-10 h-10 mr-5"
+          />
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-5 font-[family-name:var(--font-alfaslabone)]">
+            Dashboard
+          </h1>
+        </div>
         <div className="flex flex-row gap-2 items-center text-4xl">
           <CircleUserRound className="w-10 h-10 sm:w-15 sm:h-15 text-white" />
-          <p className="break-all sm:text-5xl md:text-7xl">{user.email}</p>
+          <p className="break-all text-1xl sm:text-5xl">{user.email}</p>
         </div>
         <div className="flex flex-row gap-2 items-center text-1xl mt-5">
           {/* El logout debe ser manejado en el cliente */}

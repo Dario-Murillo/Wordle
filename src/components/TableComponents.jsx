@@ -38,7 +38,7 @@ export function Button({ onClick, disabled, children }) {
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="bg-[#3a3a3c] hover:bg-[#535356] text-white px-4 py-2 rounded disabled:opacity-50"
+      className="bg-[#3a3a3c] hover:bg-[#535356] text-white px-4 py-2 rounded disabled:opacity-50 mt-2"
     >
       {children}
     </button>
