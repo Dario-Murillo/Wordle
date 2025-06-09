@@ -14,11 +14,11 @@ export default function validateHardModeGuess(previousGuesses, currentGuess) {
     const char = currentGuess[i];
 
     if (color === 'green' && char !== key) {
-      return `La letra ${key.toUpperCase()} debe estar en la posición ${i + 1}`;
+      return `La letra ${key.toUpperCase()} debe estar en la posición ${i + 1}.`;
     }
 
     if (color === 'yellow' && !currentGuess.includes(key)) {
-      return `Debes usar la letra ${key.toUpperCase()}`;
+      return `Debes usar la letra ${key.toUpperCase()}.`;
     }
   }
 

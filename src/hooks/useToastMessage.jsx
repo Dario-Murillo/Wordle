@@ -10,7 +10,7 @@ export default function useToast() {
   };
 
   const showInvalidToast = (
-    customMessage = 'No está en la lista de palabras',
+    customMessage = 'No está en la lista de palabras.',
   ) => {
     setShakeRow(true);
     setMessage(customMessage);
