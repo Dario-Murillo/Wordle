@@ -5,11 +5,9 @@ import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
 import Row from '../../components/Row';
 import Tile from '../../components/Tile';
-import {
-  formatGuess,
-  addNewGuess,
-  handleKeyup,
-} from '../../hooks/useWordleHelpers';
+import formatGuess from '../../hooks/helpers/formatGuess';
+import addNewGuess from '../../hooks/helpers/addNewGuess';
+import handleKeyup from '../../hooks/helpers/handleKeyup';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({

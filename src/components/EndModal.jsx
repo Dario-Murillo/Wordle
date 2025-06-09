@@ -13,10 +13,14 @@ export default function EndModal({ isCorrect, solution, modalVisible }) {
       `}
     >
       <div
+        className={`absolute inset-0 bg-black transition-opacity duration-500 ${
+          modalVisible ? 'opacity-30' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+      <div
         className={`
           bg-[#1E1E1E] px-8 py-8 rounded-lg shadow-lg max-w-md w-full text-center min-h-[280px]
-          flex flex-col items-center justify-center transform
-          transition-all duration-500 ease-in-out
+          flex flex-col items-center justify-center transform transition-all duration-500 ease-in-out z-10
           ${modalVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}
         `}
         style={{ transitionProperty: 'transform, opacity' }}
@@ -38,6 +42,10 @@ export default function EndModal({ isCorrect, solution, modalVisible }) {
           <button
             type="button"
             className="cursor-pointer rounded-full font-bold font-[family-name:var(--font-karla)] text-black bg-[#D9D9D9] text-lg h-12 w-36 px-6"
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
           >
             Jugar
           </button>

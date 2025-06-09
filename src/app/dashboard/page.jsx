@@ -39,6 +39,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (state.success) {
       triggerToast('Cambio de contraseña exitoso');
+      closeModalBase();
     }
     setError(state.error || null);
   }, [state, triggerToast]);
@@ -95,6 +96,7 @@ export default function DashboardPage() {
           `}
           >
             <X
+              type="button"
               role="button"
               data-testid="close-modal-button"
               onClick={handleCloseModal}

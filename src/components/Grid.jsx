@@ -2,14 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Row from './Row';
 
-export default function Grid({ guesses, currentGuess, turn, isCorrect }) {
+export default function Grid({
+  guesses,
+  currentGuess,
+  turn,
+  isCorrect,
+  shouldShake,
+}) {
   return (
-    <div>
+    <div className="w-full max-w-[340px] sm:max-w-[400px] mx-auto">
       {guesses.map((g, i) => {
         const isWinningRow = isCorrect && i === turn - 1;
         if (turn === i) {
-          /* eslint-disable-next-line react/no-array-index-key */
-          return <Row key={`${g}-${i}`} currentGuess={currentGuess} />;
+          return (
+            <Row
+              /* eslint-disable-next-line react/no-array-index-key */
+              key={`${g}-${i}`}
+              currentGuess={currentGuess}
+              shouldShake={shouldShake && i === turn}
+            />
+          );
         }
         /* eslint-disable-next-line react/no-array-index-key */
         return <Row key={`${g}-${i}`} guess={g} isWinningRow={isWinningRow} />;
@@ -30,4 +42,5 @@ Grid.propTypes = {
   currentGuess: PropTypes.string.isRequired,
   turn: PropTypes.number.isRequired,
   isCorrect: PropTypes.bool.isRequired,
+  shouldShake: PropTypes.bool.isRequired,
 };

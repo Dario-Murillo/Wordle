@@ -1,64 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import useWordle from '../hooks/useWordle';
+import useToast from '../hooks/useToastMessage';
 import Grid from './Grid';
 import EndModal from './EndModal';
 import ToastMessage from './ToastMessage';
+import Keyboard from './Keyboard';
+import handleVirtualKey from '../hooks/handleVirtualKey';
 
 export default function Wordle({ secretWord }) {
-  const { currentGuess, guesses, turn, isCorrect, handleKeyup } =
-    useWordle(secretWord);
   const [showEndModal, setShowEndModal] = useState(false);
-  const [message, setMessage] = useState('');
   const [hasShownMessage, setHasShownMessage] = useState(false);
+
+  const {
+    message,
+    toastColor,
+    shakeRow,
+    showInvalidToast,
+    showWinToast,
+    showLoseToast,
+  } = useToast();
+
+  const {
+    currentGuess,
+    guesses,
+    turn,
+    isCorrect,
+    validWords,
+    usedKeys,
+    setCurrentGuess,
+    setGuesses,
+    setTurn,
+    setUsedKeys,
+    setIsCorrect,
+    addNewGuess,
+    formatGuess,
+    handleKeyup,
+  } = useWordle(secretWord, {
+    onInvalidWord: showInvalidToast,
+  });
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);
     const toastDelay = 1500;
 
     if (isCorrect && !hasShownMessage) {
-      const getMessageByTurn = (winningTurn) => {
-        switch (winningTurn) {
-          case 1:
-            return '🤯 ¡A la primera!';
-          case 2:
-            return '🔥 ¡Increíble!';
-          case 3:
-            return '👏 ¡Muy bien!';
-          case 4:
-            return '😊 ¡Buen trabajo!';
-          case 5:
-            return '😅 ¡Por poco!';
-          case 6:
-            return '😮 ¡Justo a tiempo!';
-          default:
-            return '🎉 ¡Lo lograste!';
-        }
-      };
-
-      const messageByTurn = getMessageByTurn(turn);
-
       setTimeout(() => {
-        setMessage(messageByTurn);
+        showWinToast(turn);
         setHasShownMessage(true);
-
-        setTimeout(() => setMessage(''), 2000);
+        setTimeout(() => setShowEndModal(true), 2000);
       }, toastDelay);
-
-      setTimeout(() => setShowEndModal(true), toastDelay + 2000);
 
       window.removeEventListener('keyup', handleKeyup);
     }
 
-    if (turn > 5 && !hasShownMessage) {
+    if (turn > 5 && !isCorrect && !hasShownMessage) {
       setTimeout(() => {
-        setMessage('⏳ ¡Te quedaste sin intentos!');
+        showLoseToast();
         setHasShownMessage(true);
-
-        setTimeout(() => setMessage(''), 2000);
+        setTimeout(() => setShowEndModal(true), 2000);
       }, toastDelay);
-
-      setTimeout(() => setShowEndModal(true), toastDelay + 2000);
 
       window.removeEventListener('keyup', handleKeyup);
     }
@@ -67,22 +68,52 @@ export default function Wordle({ secretWord }) {
   }, [handleKeyup, isCorrect, turn, hasShownMessage]);
 
   return (
-    <div className="relative flex flex-col items-center">
-      <ToastMessage message={message} />
+    <div className="flex flex-col justify-between h-full max-h-[calc(100vh-32px)] w-full">
+      <div className="relative w-full">
+        <ToastMessage message={message} bgColor={toastColor} />
+      </div>
       <div className="mt-16">
         <Grid
           guesses={guesses}
           currentGuess={currentGuess}
           turn={turn}
           isCorrect={isCorrect}
+          shouldShake={shakeRow}
         />
       </div>
-      <EndModal
-        isCorrect={isCorrect}
-        turn={turn}
-        solution={secretWord}
-        modalVisible={showEndModal}
+      <Keyboard
+        usedKeys={usedKeys}
+        onKeyPress={(key) =>
+          handleVirtualKey(
+            key,
+            {
+              currentGuess,
+              turn,
+              validWords,
+            },
+            {
+              setCurrentGuess,
+              setGuesses,
+              setIsCorrect,
+              setTurn,
+              setUsedKeys,
+              solution: secretWord,
+              addNewGuess,
+              formatGuess,
+              onInvalidWord: showInvalidToast,
+            },
+          )
+        }
       />
+
+      {showEndModal && (
+        <EndModal
+          isCorrect={isCorrect}
+          turn={turn}
+          solution={secretWord}
+          modalVisible={showEndModal}
+        />
+      )}
     </div>
   );
 }

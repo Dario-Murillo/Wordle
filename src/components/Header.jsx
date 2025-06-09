@@ -60,21 +60,22 @@ export default function Header() {
           `}
           >
             <X
+              type="button"
               role="button"
               data-testid="close-modal-button"
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-1xl cursor-pointer text-black"
             />
             <h1 className="text-4xl font-bold font-[family-name:var(--font-alfaslabone)] mb-3 tracking-wide leading-tight text-black text-center w-full">
-              Cómo Jugar
+              ¿Cómo Jugar?
             </h1>
             <div className="text-black text-left w-full">
               <p className="font-bold">Adivina el Wordle en 6 intentos.</p>
               <ul className="list-disc pl-5 mb-2">
-                <li>Cada intento debe ser una palabra válida de 5 letras</li>
+                <li>Cada intento debe ser una palabra válida de 5 letras. </li>
                 <li>
                   El color de las fichas cambiará para mostrar qué tan cerca
-                  estuvo tu intento de adivinar la palabra
+                  estuvo tu intento de adivinar la palabra.
                 </li>
               </ul>
               <p className="font-bold">Ejemplo:</p>
@@ -110,16 +111,16 @@ export default function Header() {
                   flipDelay={0.8}
                 />
               </div>
-              <p>La P está en la palabra y en el lugar correcto</p>
-              <p>La I está en la palabra, pero en el lugar equivocado </p>
-              <p>El resto de letras no estan en la palabra </p>
+              <p>La P está en la palabra y en el lugar correcto. </p>
+              <p>La I está en la palabra, pero en el lugar equivocado. </p>
+              <p>El resto de letras no estan en la palabra. </p>
               <p className="font-bold mt-4">
                 ¿Cómo funciona la dificultad difícil?
               </p>
               <p className="">
                 Cualquier pista revelada debe utilizarse en conjeturas
-                posteriores. Por ejemplo, en la la palabra Piano como se reveló
-                que la I está se debe usar en los próximos intentos.
+                posteriores. Por ejemplo, en la palabra PIANO como se reveló que
+                la I está se debe usar en los próximos intentos.
               </p>
             </div>
           </div>
