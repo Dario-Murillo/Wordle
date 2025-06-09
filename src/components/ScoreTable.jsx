@@ -86,9 +86,7 @@ export default function ScoreTable({ user }) {
                 <TableCell>{item.palabra}</TableCell>
                 <TableCell>{item.adivinada ? 'Si' : 'No'}</TableCell>
                 <TableCell>{item.intentos}</TableCell>
-                <TableCell>
-                  {new Date(item.fecha).toLocaleString().split(',')[0]}
-                </TableCell>
+                <TableCell>{item.fecha}</TableCell>
               </TableRow>
             ))}
           </TableBody>
