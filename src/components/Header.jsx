@@ -118,8 +118,8 @@ export default function Header() {
               </p>
               <p className="">
                 Cualquier pista revelada debe utilizarse en conjeturas
-                posteriores. Por ejemplo, en la la palabra Piano como se reveló
-                que la I está se debe usar en los próximos intentos.
+                posteriores. Por ejemplo, en la palabra PIANO como se reveló que
+                la I está se debe usar en los próximos intentos.
               </p>
             </div>
           </div>
