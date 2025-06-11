@@ -48,24 +48,19 @@ export default function Wordle({ secretWord }) {
     const toastDelay = 1500;
 
     const saveResult = async (adivinada) => {
-      try {
-        const supabase = createClient();
-        const { data, error: userError } = await supabase.auth.getUser();
-        if (userError) throw userError;
-        const user = data?.user;
-        const date = new Date();
-        if (user) {
-          const { error } = await supabase.from('Registros').insert({
-            user_id: user.id,
-            palabra: secretWord,
-            adivinada,
-            intentos: turn,
-            fecha: date,
-          });
-          if (error) throw error;
-        }
-      } catch (err) {
-        console.error('Error al guardar el resultado:', err);
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      const user = data?.user;
+      const date = new Date();
+      if (user) {
+        const { error } = await supabase.from('Registros').insert({
+          user_id: user.id,
+          palabra: secretWord,
+          adivinada,
+          intentos: turn,
+          fecha: date,
+        });
+        if (error) console.error(error);
       }
     };
 
