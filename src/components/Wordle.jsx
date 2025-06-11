@@ -7,6 +7,7 @@ import EndModal from './EndModal';
 import ToastMessage from './ToastMessage';
 import Keyboard from './Keyboard';
 import handleVirtualKey from '../hooks/handleVirtualKey';
+import createClient from '../utils/supabase/client';
 
 export default function Wordle({ secretWord }) {
   const [showEndModal, setShowEndModal] = useState(false);
@@ -46,6 +47,28 @@ export default function Wordle({ secretWord }) {
     window.addEventListener('keyup', handleKeyup);
     const toastDelay = 1500;
 
+    const saveResult = async (adivinada) => {
+      try {
+        const supabase = createClient();
+        const { data, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+        const user = data?.user;
+        const date = new Date();
+        if (user) {
+          const { error } = await supabase.from('Registros').insert({
+            user_id: user.id,
+            palabra: secretWord,
+            adivinada,
+            intentos: turn,
+            fecha: date,
+          });
+          if (error) throw error;
+        }
+      } catch (err) {
+        console.error('Error al guardar el resultado:', err);
+      }
+    };
+
     if (isCorrect && !hasShownMessage) {
       setTimeout(() => {
         showWinToast(turn);
@@ -53,6 +76,7 @@ export default function Wordle({ secretWord }) {
         setTimeout(() => setShowEndModal(true), 2000);
       }, toastDelay);
 
+      saveResult(true);
       window.removeEventListener('keyup', handleKeyup);
     }
 
@@ -63,6 +87,7 @@ export default function Wordle({ secretWord }) {
         setTimeout(() => setShowEndModal(true), 2000);
       }, toastDelay);
 
+      saveResult(false);
       window.removeEventListener('keyup', handleKeyup);
     }
 
