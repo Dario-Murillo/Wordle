@@ -12,17 +12,38 @@ vi.mock('../../utils/supabase/client', () => {
   const signOut = vi.fn(() => ({ error: null }));
   const getUser = vi.fn(() =>
     Promise.resolve({
-      data: { user: { email: 'dariomurillochaverri@gmail.com' } },
+      data: {
+        user: { id: '948509834', email: 'dariomurillochaverri@gmail.com' },
+      },
     }),
   );
+  // eslint-disable-next-line no-unused-vars
+  const from = () => ({
+    select: vi.fn().mockResolvedValue({
+      data: [
+        {
+          id: 1,
+          user_id: 'user-123',
+          palabra: 'Piano',
+          adivinada: true,
+          intentos: 2,
+          fecha: '2025-06-08T23:26:36.128176+00:00',
+        },
+      ],
+      error: null,
+    }),
+  });
   const createClient = vi.fn(() => ({
     auth: { signOut, getUser },
+    from,
   }));
+
   return {
     default: createClient,
     __esModule: true,
     signOut,
     getUser,
+    from,
     createClient,
   };
 });
@@ -45,12 +66,14 @@ beforeEach(() => {
 });
 
 describe('Logout Button', () => {
-  it('se muesta el boton', () => {
+  it('se muesta el boton', async () => {
     render(<DashboardPage />);
 
-    expect(
-      screen.getByRole('button', { name: /Cerrar sesión/i }),
-    ).toBeInTheDocument();
+    await act(async () => {
+      expect(
+        screen.getByRole('button', { name: /Cerrar sesión/i }),
+      ).toBeInTheDocument();
+    });
   });
 
   it('redirige al dashboard si se loguea correctamente', async () => {
