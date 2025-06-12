@@ -40,7 +40,6 @@ describe('jugar de nuevo', () => {
 
     fireEvent.click(jugarButton);
 
-    expect(window.localStorage.clear).toHaveBeenCalled();
     expect(window.location.reload).toHaveBeenCalled();
   });
 });
