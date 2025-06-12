@@ -8,6 +8,31 @@ import ToastMessage from '../../components/ToastMessage';
 import EndModal from '../../components/EndModal';
 import useWordle from '../../hooks/useWordle';
 
+const insertMock = vi.fn(() => Promise.resolve({ error: null }));
+const getUserMock = vi.fn(() =>
+  Promise.resolve({
+    data: {
+      user: { id: '948509834', email: 'dariomurillochaverri@gmail.com' },
+    },
+    error: null,
+  }),
+);
+
+// Mock del cliente Supabase
+vi.mock('../../utils/supabase/client', () => {
+  return {
+    __esModule: true,
+    default: () => ({
+      auth: {
+        getUser: getUserMock,
+      },
+      from: () => ({
+        insert: insertMock,
+      }),
+    }),
+  };
+});
+
 vi.mock('../../hooks/useWordle');
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -22,6 +47,8 @@ vi.mock('next/navigation', () => ({
 
 beforeEach(() => {
   vi.useFakeTimers();
+  insertMock.mockClear();
+  getUserMock.mockClear();
 });
 
 afterEach(() => {
@@ -181,5 +208,144 @@ describe('endgame', () => {
       screen.queryByText('⏳ ¡Te quedaste sin intentos!'),
     ).not.toBeInTheDocument();
     expect(screen.getByText('La palabra era WORDS.')).toBeInTheDocument();
+  });
+});
+
+test('no guarda datos si el usuario no está logueado', async () => {
+  // Mock explícito: usuario no logueado
+  getUserMock.mockResolvedValueOnce({ data: { user: null }, error: null });
+
+  useWordle.mockReturnValue({
+    currentGuess: '',
+    guesses: [['w', 'o', 'r', 'd', 's']],
+    turn: 3,
+    isCorrect: true,
+    handleKeyup: vi.fn(),
+  });
+
+  render(<Wordle secretWord="words" />);
+
+  act(() => {
+    vi.advanceTimersByTime(1500);
+  });
+
+  expect(insertMock).not.toHaveBeenCalled();
+});
+
+test('imprime el error si ocurre al insertar', async () => {
+  getUserMock.mockResolvedValueOnce({
+    data: {
+      user: { id: '948509834', email: 'dariomurillochaverri@gmail.com' },
+    },
+    error: null,
+  });
+
+  insertMock.mockResolvedValueOnce({ error: 'Error al insertar' });
+
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+  useWordle.mockReturnValue({
+    currentGuess: '',
+    guesses: Array(6).fill([]),
+    turn: 6,
+    isCorrect: false,
+    handleKeyup: vi.fn(),
+  });
+
+  vi.useFakeTimers();
+
+  render(<Wordle secretWord="words" />);
+
+  act(() => {
+    vi.runAllTimers();
+  });
+
+  // Asegurar que todas las promesas pendientes se resuelvan
+  await act(async () => {
+    await Promise.resolve();
+  });
+
+  expect(insertMock).toHaveBeenCalled();
+  expect(consoleSpy).toHaveBeenCalledWith(
+    'Error al guardar el resultado:',
+    'Error al insertar',
+  );
+
+  consoleSpy.mockRestore();
+});
+
+test('guarda datos si el usuario adivinó la palabra', async () => {
+  getUserMock.mockResolvedValueOnce({
+    data: {
+      user: { id: '948509834', email: 'dariomurillochaverri@gmail.com' },
+    },
+    error: null,
+  });
+
+  useWordle.mockReturnValue({
+    currentGuess: '',
+    guesses: [['w', 'o', 'r', 'd', 's']],
+    turn: 3,
+    isCorrect: true,
+    handleKeyup: vi.fn(),
+  });
+
+  vi.useFakeTimers();
+
+  render(<Wordle secretWord="words" />);
+
+  act(() => {
+    vi.runAllTimers();
+  });
+
+  // Asegurar que todas las promesas pendientes se resuelvan
+  await act(async () => {
+    await Promise.resolve();
+  });
+
+  expect(insertMock).toHaveBeenCalledWith({
+    user_id: '948509834',
+    palabra: 'words',
+    adivinada: true,
+    intentos: 3,
+    fecha: expect.any(Date),
+  });
+});
+
+test('guarda datos si el usuario NO adivinó la palabra', async () => {
+  getUserMock.mockResolvedValueOnce({
+    data: {
+      user: { id: '948509834', email: 'dariomurillochaverri@gmail.com' },
+    },
+    error: null,
+  });
+
+  useWordle.mockReturnValue({
+    currentGuess: '',
+    guesses: Array(6).fill([]),
+    turn: 6,
+    isCorrect: false,
+    handleKeyup: vi.fn(),
+  });
+
+  vi.useFakeTimers();
+
+  render(<Wordle secretWord="words" />);
+
+  act(() => {
+    vi.runAllTimers();
+  });
+
+  // Asegurar que todas las promesas pendientes se resuelvan
+  await act(async () => {
+    await Promise.resolve();
+  });
+
+  expect(insertMock).toHaveBeenCalledWith({
+    user_id: '948509834',
+    palabra: 'words',
+    adivinada: false,
+    intentos: 6,
+    fecha: expect.any(Date),
   });
 });
