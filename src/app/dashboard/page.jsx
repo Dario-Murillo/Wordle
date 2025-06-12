@@ -61,7 +61,6 @@ export default function DashboardPage() {
         <div className="flex flex-row">
           <MoveLeft
             type="button"
-            role="button"
             onClick={handleLeft}
             className="cursor-pointer flex w-10 h-10 mr-5"
           />
@@ -109,7 +108,6 @@ export default function DashboardPage() {
           >
             <X
               type="button"
-              role="button"
               data-testid="close-modal-button"
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-1xl cursor-pointer text-black"
