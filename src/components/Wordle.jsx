@@ -54,6 +54,7 @@ export default function Wordle({ secretWord }) {
       }, toastDelay);
 
       window.removeEventListener('keyup', handleKeyup);
+      localStorage.clear();
     }
 
     if (turn > 5 && !isCorrect && !hasShownMessage) {
@@ -64,6 +65,7 @@ export default function Wordle({ secretWord }) {
       }, toastDelay);
 
       window.removeEventListener('keyup', handleKeyup);
+      localStorage.clear();
     }
 
     return () => window.removeEventListener('keyup', handleKeyup);
