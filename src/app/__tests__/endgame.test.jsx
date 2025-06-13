@@ -308,7 +308,7 @@ test('guarda datos si el usuario adivinó la palabra', async () => {
     palabra: 'words',
     adivinada: true,
     intentos: 3,
-    fecha: expect.any(Date),
+    fecha: expect.any(String),
   });
 });
 
@@ -346,6 +346,6 @@ test('guarda datos si el usuario NO adivinó la palabra', async () => {
     palabra: 'words',
     adivinada: false,
     intentos: 6,
-    fecha: expect.any(Date),
+    fecha: expect.any(String),
   });
 });
