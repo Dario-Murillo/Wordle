@@ -28,28 +28,39 @@ vi.mock('../../hooks/useModalVisibility', () => ({
   ],
 }));
 
-vi.mock('../../utils/supabase/client', () => ({
-  __esModule: true,
-  default: () => ({
-    from: () => ({
-      select: () => ({
-        order: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 1,
-              user_id: 'user-123',
-              palabra: 'Piano',
-              adivinada: true,
-              intentos: 2,
-              fecha: '2025-06-08T23:26:36.128176+00:00',
-            },
-          ],
-          error: null,
-        }),
-      }),
-    }),
-  }),
-}));
+const datosMock = [
+  {
+    id: 1,
+    user_id: 'user-123',
+    palabra: 'PIANO',
+    adivinada: true,
+    intentos: 2,
+    fecha: '2025-06-08',
+  },
+  {
+    id: 2,
+    user_id: 'user-123',
+    palabra: 'RIVER',
+    adivinada: false,
+    intentos: 3,
+    fecha: '2025-06-09',
+  },
+];
+
+const orderMock = vi.fn().mockResolvedValue({ data: datosMock, error: null });
+const eqMock = vi.fn(() => ({ order: orderMock }));
+const selectMock = vi.fn(() => ({ eq: eqMock }));
+const fromMock = vi.fn(() => ({ select: selectMock }));
+
+vi.mock('../../utils/supabase/client', () => {
+  const createClient = vi.fn(() => ({
+    from: fromMock,
+  }));
+  return {
+    default: createClient,
+    __esModule: true,
+  };
+});
 
 // Asegúrate de limpiar el mock antes del test
 const toggleMock = vi.fn();

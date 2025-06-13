@@ -29,6 +29,7 @@ export default function ScoreTable({ user }) {
       const { data, error } = await supabase
         .from('Registros')
         .select('*')
+        .eq('user_id', user.id)
         .order('fecha', { ascending: true });
       if (!error) setScores(data || []);
       else setScores([]);

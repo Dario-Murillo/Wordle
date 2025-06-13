@@ -1,7 +1,7 @@
 import { expect, describe, it, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ScoreTable from '../../components/ScoreTable';
 import * as supabaseClient from '../../utils/supabase/client';
+import ScoreTable from '../../components/ScoreTable';
 
 vi.mock('../../utils/supabase/client', () => {
   const signOut = vi.fn(() => ({ error: null }));
@@ -17,7 +17,7 @@ vi.mock('../../utils/supabase/client', () => {
     data: [
       {
         id: 1,
-        user_id: 'user-123',
+        user_id: '948509834',
         palabra: 'PIANO',
         adivinada: true,
         intentos: 2,
@@ -25,38 +25,28 @@ vi.mock('../../utils/supabase/client', () => {
       },
       {
         id: 2,
-        user_id: 'user-123',
+        user_id: '948509834',
         palabra: 'RIVER',
         adivinada: false,
         intentos: 3,
         fecha: '2025-06-09',
       },
     ],
-
     error: null,
   });
 
-  const select = vi.fn(() => ({
-    order,
-  }));
-
-  const from = vi.fn(() => ({
-    select,
-  }));
+  const eq = vi.fn(() => ({ order }));
+  const select = vi.fn(() => ({ eq }));
+  const from = vi.fn(() => ({ select }));
 
   const createClient = vi.fn(() => ({
     auth: { signOut, getUser },
-
     from,
   }));
 
   return {
     default: createClient,
     __esModule: true,
-    signOut,
-    getUser,
-    from,
-    createClient,
   };
 });
 
@@ -104,7 +94,9 @@ describe('Score Table', () => {
     supabaseClient.default.mockReturnValue({
       from: () => ({
         select: () => ({
-          order: vi.fn().mockResolvedValue({ data, error: null }),
+          eq: () => ({
+            order: vi.fn().mockResolvedValue({ data, error: null }),
+          }),
         }),
       }),
     });
