@@ -23,7 +23,7 @@ export default defineConfig({
         '**/coverage/**',
         // ignore supabase setup files
         'src/utils/supabase/**',
-        'src/app/middleware/**',
+        'src/app/middleware.js',
         'src/app/auth/**',
       ],
     },
