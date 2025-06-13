@@ -42,7 +42,6 @@ vi.mock('../../utils/supabase/client', () => {
         intentos: 2,
         fecha: '2025-06-08',
       },
-
       {
         id: 2,
         user_id: 'user-123',
@@ -52,12 +51,15 @@ vi.mock('../../utils/supabase/client', () => {
         fecha: '2025-06-09',
       },
     ],
-
     error: null,
   });
 
-  const select = vi.fn(() => ({
+  const eq = vi.fn(() => ({
     order,
+  }));
+
+  const select = vi.fn(() => ({
+    eq,
   }));
 
   const from = vi.fn(() => ({
@@ -66,7 +68,6 @@ vi.mock('../../utils/supabase/client', () => {
 
   const createClient = vi.fn(() => ({
     auth: { signOut, getUser },
-
     from,
   }));
 
