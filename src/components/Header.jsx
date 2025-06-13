@@ -61,7 +61,6 @@ export default function Header() {
           >
             <X
               type="button"
-              role="button"
               data-testid="close-modal-button"
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-1xl cursor-pointer text-black"

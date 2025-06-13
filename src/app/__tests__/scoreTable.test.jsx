@@ -13,31 +13,40 @@ vi.mock('../../utils/supabase/client', () => {
     }),
   );
 
-  const from = () => ({
-    select: vi.fn().mockResolvedValue({
-      data: [
-        {
-          id: 1,
-          user_id: 'user-123',
-          palabra: 'PIANO',
-          adivinada: true,
-          intentos: 2,
-          fecha: '2025-06-08',
-        },
-        {
-          id: 2,
-          user_id: 'user-123',
-          palabra: 'RIVER',
-          adivinada: false,
-          intentos: 3,
-          fecha: '2025-06-09',
-        },
-      ],
-      error: null,
-    }),
+  const order = vi.fn().mockResolvedValue({
+    data: [
+      {
+        id: 1,
+        user_id: 'user-123',
+        palabra: 'PIANO',
+        adivinada: true,
+        intentos: 2,
+        fecha: '2025-06-08',
+      },
+      {
+        id: 2,
+        user_id: 'user-123',
+        palabra: 'RIVER',
+        adivinada: false,
+        intentos: 3,
+        fecha: '2025-06-09',
+      },
+    ],
+
+    error: null,
   });
+
+  const select = vi.fn(() => ({
+    order,
+  }));
+
+  const from = vi.fn(() => ({
+    select,
+  }));
+
   const createClient = vi.fn(() => ({
     auth: { signOut, getUser },
+
     from,
   }));
 
@@ -94,7 +103,9 @@ describe('Score Table', () => {
 
     supabaseClient.default.mockReturnValue({
       from: () => ({
-        select: vi.fn().mockResolvedValue({ data, error: null }),
+        select: () => ({
+          order: vi.fn().mockResolvedValue({ data, error: null }),
+        }),
       }),
     });
 

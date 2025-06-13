@@ -3,6 +3,20 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import * as supabaseClient from '../../utils/supabase/client';
 import DashboardPage from '../dashboard/page';
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: vi.fn(),
+  }),
+}));
+
 vi.mock('../../hooks/useAuth', () => ({
   __esModule: true,
   default: () => ({ email: 'dariomurillochaverri@gmail.com' }),
@@ -17,24 +31,42 @@ vi.mock('../../utils/supabase/client', () => {
       },
     }),
   );
-  // eslint-disable-next-line no-unused-vars
-  const from = () => ({
-    select: vi.fn().mockResolvedValue({
-      data: [
-        {
-          id: 1,
-          user_id: 'user-123',
-          palabra: 'Piano',
-          adivinada: true,
-          intentos: 2,
-          fecha: '2025-06-08T23:26:36.128176+00:00',
-        },
-      ],
-      error: null,
-    }),
+
+  const order = vi.fn().mockResolvedValue({
+    data: [
+      {
+        id: 1,
+        user_id: 'user-123',
+        palabra: 'PIANO',
+        adivinada: true,
+        intentos: 2,
+        fecha: '2025-06-08',
+      },
+
+      {
+        id: 2,
+        user_id: 'user-123',
+        palabra: 'RIVER',
+        adivinada: false,
+        intentos: 3,
+        fecha: '2025-06-09',
+      },
+    ],
+
+    error: null,
   });
+
+  const select = vi.fn(() => ({
+    order,
+  }));
+
+  const from = vi.fn(() => ({
+    select,
+  }));
+
   const createClient = vi.fn(() => ({
     auth: { signOut, getUser },
+
     from,
   }));
 
@@ -45,15 +77,6 @@ vi.mock('../../utils/supabase/client', () => {
     getUser,
     from,
     createClient,
-  };
-});
-
-vi.mock('next/navigation', () => {
-  const redirectMock = vi.fn();
-  const useRouter = () => ({ replace: vi.fn() });
-  return {
-    redirect: redirectMock,
-    useRouter,
   };
 });
 
