@@ -30,7 +30,7 @@ export default function ScoreTable({ user }) {
         .from('Registros')
         .select('*')
         .eq('user_id', user.id)
-        .order('fecha', { ascending: true });
+        .order('fecha', { ascending: false });
       if (!error) setScores(data || []);
       else setScores([]);
     };
