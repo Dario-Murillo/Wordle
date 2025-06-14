@@ -24,6 +24,16 @@ export default function Wordle({ secretWord }) {
     showLoseToast,
   } = useToast();
 
+  let initialState = {};
+  const saved = localStorage.getItem('wordle_state');
+  if (saved) {
+    try {
+      initialState = JSON.parse(saved);
+    } catch {
+      console.error('Game status undefined');
+    }
+  }
+
   const {
     currentGuess,
     guesses,
@@ -42,6 +52,7 @@ export default function Wordle({ secretWord }) {
     hardMode,
   } = useWordle(secretWord, {
     onInvalidWord: showInvalidToast,
+    initialState,
   });
 
   function toISODate(fecha) {
@@ -72,6 +83,21 @@ export default function Wordle({ secretWord }) {
       }
     }
   };
+
+  useEffect(() => {
+    // Solo guarda si la partida no ha terminado
+    if (!isCorrect && turn <= 5) {
+      localStorage.setItem(
+        'wordle_state',
+        JSON.stringify({
+          turn,
+          guesses,
+          currentGuess,
+          usedKeys,
+        }),
+      );
+    }
+  }, [turn, guesses, currentGuess, usedKeys, isCorrect]);
 
   useEffect(() => {
     window.addEventListener('keyup', handleKeyup);

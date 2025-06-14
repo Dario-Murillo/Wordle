@@ -3,13 +3,15 @@ import formatGuess from './helpers/formatGuess';
 import addNewGuess from './helpers/addNewGuess';
 import handleKeyup from './helpers/handleKeyup';
 
-const useWordle = (solution, { onInvalidWord } = {}) => {
-  const [turn, setTurn] = useState(0);
-  const [currentGuess, setCurrentGuess] = useState('');
-  const [guesses, setGuesses] = useState([...Array(6)]);
+const useWordle = (solution, { onInvalidWord, initialState = {} } = {}) => {
+  const [turn, setTurn] = useState(initialState.turn || 0);
+  const [currentGuess, setCurrentGuess] = useState(
+    initialState.currentGuess || '',
+  );
+  const [guesses, setGuesses] = useState(initialState.guesses || [...Array(6)]);
   const [validWords, setValidWords] = useState(new Set());
   const [isCorrect, setIsCorrect] = useState(false);
-  const [usedKeys, setUsedKeys] = useState({});
+  const [usedKeys, setUsedKeys] = useState(initialState.usedKeys || {});
   const [hardMode, setHardMode] = useState(() => {
     return localStorage.getItem('difficulty') === 'hard';
   });

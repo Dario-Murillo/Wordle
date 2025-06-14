@@ -1,5 +1,11 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  act,
+} from '@testing-library/react';
 import Game from '../game/page';
 import Wordle from '../../components/Wordle';
 import Grid from '../../components/Grid';
@@ -8,6 +14,7 @@ import Tile from '../../components/Tile';
 import formatGuess from '../../hooks/helpers/formatGuess';
 import addNewGuess from '../../hooks/helpers/addNewGuess';
 import handleKeyup from '../../hooks/helpers/handleKeyup';
+import * as useWordle from '../../hooks/useWordle';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -436,4 +443,46 @@ test('tile no tiene la clase flip cuando no se le pasa bgColor', () => {
   render(<Tile letter="w" />);
   const tile = screen.getByTestId('tile');
   expect(tile).not.toHaveClass('flip');
+});
+
+test('carga el estado guardado si existe en localStorage', () => {
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      text: () => Promise.resolve('PIANO\nRIVER\nCASAS'), // o cualquier lista de palabras dummy
+    }),
+  );
+
+  localStorage.setItem(
+    'wordle_state',
+    JSON.stringify({
+      turn: 2,
+      guesses: [
+        ['P', 'I', 'A', 'N', 'O'],
+        ['', '', '', '', ''],
+      ],
+      currentGuess: 'RIVER',
+      usedKeys: { P: 'correct', I: 'present' },
+    }),
+  );
+
+  const spy = vi.spyOn(useWordle, 'default');
+
+  act(() => {
+    render(<Wordle secretWord="PIANO" />);
+  });
+
+  expect(spy).toHaveBeenCalledWith(
+    'PIANO',
+    expect.objectContaining({
+      initialState: expect.objectContaining({
+        turn: 2,
+        guesses: [
+          ['P', 'I', 'A', 'N', 'O'],
+          ['', '', '', '', ''],
+        ],
+        currentGuess: 'RIVER',
+        usedKeys: { P: 'correct', I: 'present' },
+      }),
+    }),
+  );
 });
