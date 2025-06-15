@@ -1,16 +1,31 @@
 import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
 
 const compat = new FlatCompat();
 
 export default [
   ...compat.extends('airbnb'),
   ...compat.extends('plugin:prettier/recommended'),
+
+  {
+    files: ['eslint.config.*', '*.cjs', '*.mjs'],
+    rules: {
+      'import/no-extraneous-dependencies': 'off',
+    },
+  },
+
   {
     files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.browser,
+    },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'import/no-extraneous-dependencies': 'off',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
   {
