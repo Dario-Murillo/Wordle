@@ -28,7 +28,6 @@ Run tests:
 npm run test
 ```
 
-
 ## Some of the tools used in our project and how did we installed them
 
 ### NextJS
