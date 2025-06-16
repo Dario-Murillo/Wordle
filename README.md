@@ -2,6 +2,33 @@
 
 A clone of the popular game Wordle where you try to guess a 5 letter word in 6 tries.
 
+## How to Run the Project
+
+Install dependencies:
+
+```
+npm install
+```
+
+Start the development server:
+
+```
+npm run dev
+```
+
+Open your browser and go to:
+
+```
+http://localhost:3000
+```
+
+Run tests:
+
+```
+npm run test
+```
+
+
 ## Some of the tools used in our project and how did we installed them
 
 ### NextJS
